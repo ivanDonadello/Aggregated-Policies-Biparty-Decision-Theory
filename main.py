@@ -1,6 +1,6 @@
 import pdb
 from src.tree_node_DT import TreeNode
-from src.DT_simulation import BipartyDT
+from src.BipartyDT import BipartyDT
 
 if __name__ == "__main__":
     root = TreeNode("0", "")

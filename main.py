@@ -1,5 +1,5 @@
 import pdb
-from src.tree_node_DT import TreeNode
+from src.BipartyNodeDT import TreeNode
 from src.BipartyDT import BipartyDT
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 import pdb
 from operator import itemgetter
-from src.tree_node_DT import TreeNode
+from src.BipartyNodeDT import TreeNode
 import random
 import numpy as np
 import pandas as pd

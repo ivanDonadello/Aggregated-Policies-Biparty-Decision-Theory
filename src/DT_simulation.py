@@ -19,7 +19,7 @@ def render_text(input_string):
     return input_string
 
 
-class biparty_DT:
+class BipartyDT:
     """
     Class for simulating a dialogue
     """

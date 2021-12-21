@@ -1,6 +1,6 @@
 import pdb
 from src.tree_node_DT import TreeNode
-from src.DT_simulation import biparty_DT
+from src.DT_simulation import BipartyDT
 
 if __name__ == "__main__":
     root = TreeNode("0", "")
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     n4.set_children([n7, n8])
 
     # incapsulamento albero
-    bdt = biparty_DT()
+    bdt = BipartyDT()
     bdt.root = root
     # dict tree l'ho fatta in quanto semplifica il codice di certe funzioni
     bdt.dict_tree = {0: root, 1: n2, 2: n3, 3: n4, 4: n5, 5: n6, 6: n7, 7: n8}

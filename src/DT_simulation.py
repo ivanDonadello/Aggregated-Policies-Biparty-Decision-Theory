@@ -24,8 +24,8 @@ class BipartyDT:
     Class for simulating a dialogue
     """
     def __init__(self):
-        self.dict_tree: Dict[str, Type[TreeNode]] = None
-        self.root: Type[TreeNode] = None
+        self.dict_tree: Dict[str, TreeNode] = None
+        self.root: TreeNode = None
         self.node_results = []
         self.user_model = {}
         self.extra_data = {}
@@ -52,7 +52,7 @@ class BipartyDT:
                 for same_arg in self.extra_data["same_as"][arg_id]:
                     self.user_model[same_arg] = int(sample[arg_id])
 
-    def to_pdf(self, name) -> None:
+    def to_pdf(self, name: str) -> None:
         g = Digraph('G', filename=f'{name}.gv')
         g.attr(rankdir='RL', size='8,5')
         for _, tmp_node in self.dict_tree.items():

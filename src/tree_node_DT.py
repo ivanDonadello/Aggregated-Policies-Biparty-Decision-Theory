@@ -14,7 +14,7 @@ class TreeNode:
     delta = 1.0
 
     def __init__(self, _id, text) -> None:
-        self.labelling: Type[TreeNode] = None
+        self.labelling: TreeNode = None
         self.text: str = text
         self.height: int = -1
         self.id: str = _id
@@ -28,11 +28,11 @@ class TreeNode:
     def set_utility_proponent(self, value: int) -> None:
         self.utility_proponent = value
 
-    def add_child(self, node: Type[TreeNode]) -> None:
+    def add_child(self, node: TreeNode) -> None:
         assert isinstance(node, TreeNode)
         self.children.append(node)
 
-    def set_children(self, children: list[Type[TreeNode]]) -> None:
+    def set_children(self, children: List[TreeNode]) -> None:
         self.children = children
 
     def set_utility_opponent(self, utility_opponent: int) -> None:
@@ -54,7 +54,7 @@ class TreeNode:
     def isLeaf(self) -> bool:
         return True if len(self.children) == 0 else False
 
-    def AMax(self) -> list[TreeNode]:
+    def AMax(self) -> List[TreeNode]:
         """
         torna i figli del nodo con maxima utilita
         :return:
@@ -72,8 +72,8 @@ class TreeNode:
         output_list.append(max_util_node)
         for i in range(0, len(tmp_list) - 1):
             if self.is_decision:
-               if max_util_node.Q_proponent == tmp_list[i].Q_proponent:
-                   output_list.append(tmp_list[i])
+                if max_util_node.Q_proponent == tmp_list[i].Q_proponent:
+                    output_list.append(tmp_list[i])
             else:
                 if max_util_node.Q_opponent == tmp_list[i].Q_opponent:
                     output_list.append(tmp_list[i])
@@ -88,7 +88,7 @@ class TreeNode:
         for child in self.children:
             child.propagate_utility(policy=policy)
         if policy == 'bimaximax':
-            if self.isLeaf(): # the node is a leaf
+            if self.isLeaf():  # the node is a leaf
                 self.Q_proponent = self.utility_proponent
                 self.Q_opponent = self.utility_opponent
             else:

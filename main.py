@@ -11,12 +11,12 @@ if __name__ == "__main__":
     n6 = TreeNode("n6", "Try to reduce red meat slowly.")
     n7 = TreeNode("n7", "White meat can be an alternative.")
     n8 = TreeNode("n8", "Fish is a tasty alternative to meat.")
-    n5.set_utility_opponent(8)
-    n5.set_utility_proponent(2)
+    n5.set_utility_opponent(9)
+    n5.set_utility_proponent(3)
     n6.set_utility_opponent(4)
     n6.set_utility_proponent(6)
-    n7.set_utility_opponent(0)
-    n7.set_utility_proponent(1)
+    n7.set_utility_opponent(1)
+    n7.set_utility_proponent(2)
     n8.set_utility_opponent(2)
     n8.set_utility_proponent(4)
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     # operazioni di decision theory sull'albero
     bdt.root.compute_chance_decision(is_decision_node=True)
-    bdt.root.propagate_utility("average")
+    bdt.root.propagate_utility("harmonic")
 
     # printing
     bdt.to_pdf("prova")

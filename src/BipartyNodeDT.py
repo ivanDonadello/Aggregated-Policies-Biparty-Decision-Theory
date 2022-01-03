@@ -97,6 +97,36 @@ class TreeNode:
                 self.Q_opponent = self.delta*max_utility_child.Q_opponent
             if self.is_decision:
                 self.labelling = max_utility_child
+        elif policy == 'average':
+            if self.isLeaf():  # the node is a leaf
+                self.Q_proponent = (self.utility_proponent + self.utility_opponent) / 2
+                self.Q_opponent = self.utility_opponent
+            else:
+                max_utility_child = self.choose_child()
+                self.Q_proponent = self.delta * max_utility_child.Q_proponent
+                self.Q_opponent = self.delta * max_utility_child.Q_opponent
+            if self.is_decision:
+                self.labelling = max_utility_child
+        elif policy == 'geometric':
+            if self.isLeaf():  # the node is a leaf
+                self.Q_proponent = np.sqrt([self.utility_proponent * self.utility_opponent])
+                self.Q_opponent = self.utility_opponent
+            else:
+                max_utility_child = self.choose_child()
+                self.Q_proponent = self.delta * max_utility_child.Q_proponent
+                self.Q_opponent = self.delta * max_utility_child.Q_opponent
+            if self.is_decision:
+                self.labelling = max_utility_child
+        elif policy == 'harmonic':
+            if self.isLeaf():  # the node is a leaf
+                self.Q_proponent = 2 / ((1 / self.utility_proponent) + (1 / self.utility_opponent))
+                self.Q_opponent = self.utility_opponent
+            else:
+                max_utility_child = self.choose_child()
+                self.Q_proponent = self.delta * max_utility_child.Q_proponent
+                self.Q_opponent = self.delta * max_utility_child.Q_opponent
+            if self.is_decision:
+                self.labelling = max_utility_child
         else:
             print(f"Policy {policy} not implemented.")
 

@@ -23,6 +23,7 @@ class TreeNode:
         self.utility_opponent: int = -1
         self.Q_proponent: int = -1
         self.Q_opponent: int = -1
+        self.Q_aggregated: int = -1
         self.is_decision: bool = False # if it is a chance or decision node
 
     def set_utility_proponent(self, value: int) -> None:
@@ -40,7 +41,7 @@ class TreeNode:
 
     def __str__(self) -> str:
         node_type = "Decision" if self.is_decision is True else "Chance"
-        base_str = f"{node_type} node {self.id} - {self.height}:\n{self.text}\n[{self.Q_proponent}, {self.Q_opponent}]"
+        base_str = f"{node_type} node {self.id} - {self.height}:\n{self.text}\n[{self.Q_proponent}, {self.Q_opponent}, {self.Q_aggregated}]"
         # for child in self.children:
         #  base_str += f"\n\t{child.id}: {child.text}"
         return base_str
@@ -54,7 +55,7 @@ class TreeNode:
     def isLeaf(self) -> bool:
         return True if len(self.children) == 0 else False
 
-    def AMax(self) -> List[TreeNode]:
+    def AMax(self, policy: str) -> List[TreeNode]:
         """
         torna i figli del nodo con maxima utilita
         :return:
@@ -63,7 +64,10 @@ class TreeNode:
         tmp_list = self.children
 
         if self.is_decision:
-            key = attrgetter('Q_proponent', 'id')
+            if policy == 'bimaximax':
+                key = attrgetter('Q_proponent', 'id')
+            else:
+                key = attrgetter('Q_aggregated', 'id')
         else:
             key = attrgetter('Q_opponent', 'id')
 
@@ -92,50 +96,56 @@ class TreeNode:
                 self.Q_proponent = self.utility_proponent
                 self.Q_opponent = self.utility_opponent
             else:
-                max_utility_child = self.choose_child()
-                self.Q_proponent = self.delta*max_utility_child.Q_proponent
-                self.Q_opponent = self.delta*max_utility_child.Q_opponent
+                max_utility_child = self.choose_child(policy)
+                self.Q_proponent = self.delta * max_utility_child.Q_proponent
+                self.Q_opponent = self.delta * max_utility_child.Q_opponent
             if self.is_decision:
                 self.labelling = max_utility_child
         elif policy == 'average':
             if self.isLeaf():  # the node is a leaf
-                self.Q_proponent = (self.utility_proponent + self.utility_opponent) / 2
+                self.Q_aggregated = (self.utility_proponent + self.utility_opponent) / 2
+                self.Q_proponent = self.utility_proponent
                 self.Q_opponent = self.utility_opponent
             else:
-                max_utility_child = self.choose_child()
+                max_utility_child = self.choose_child(policy)
                 self.Q_proponent = self.delta * max_utility_child.Q_proponent
                 self.Q_opponent = self.delta * max_utility_child.Q_opponent
+                self.Q_aggregated = self.delta * max_utility_child.Q_aggregated
             if self.is_decision:
                 self.labelling = max_utility_child
         elif policy == 'geometric':
             if self.isLeaf():  # the node is a leaf
-                self.Q_proponent = np.sqrt([self.utility_proponent * self.utility_opponent])
+                self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)
+                self.Q_proponent = self.utility_proponent
                 self.Q_opponent = self.utility_opponent
             else:
-                max_utility_child = self.choose_child()
+                max_utility_child = self.choose_child(policy)
                 self.Q_proponent = self.delta * max_utility_child.Q_proponent
                 self.Q_opponent = self.delta * max_utility_child.Q_opponent
+                self.Q_aggregated = self.delta * max_utility_child.Q_aggregated
             if self.is_decision:
                 self.labelling = max_utility_child
         elif policy == 'harmonic':
             if self.isLeaf():  # the node is a leaf
-                self.Q_proponent = 2 / ((1 / self.utility_proponent) + (1 / self.utility_opponent))
+                self.Q_aggregated = 2 / ((1 / self.utility_proponent) + (1 / self.utility_opponent))
+                self.Q_proponent = self.utility_proponent
                 self.Q_opponent = self.utility_opponent
             else:
-                max_utility_child = self.choose_child()
+                max_utility_child = self.choose_child(policy)
                 self.Q_proponent = self.delta * max_utility_child.Q_proponent
                 self.Q_opponent = self.delta * max_utility_child.Q_opponent
+                self.Q_aggregated = self.delta * max_utility_child.Q_aggregated
             if self.is_decision:
                 self.labelling = max_utility_child
         else:
             print(f"Policy {policy} not implemented.")
 
-    def choose_child(self, pick_first: bool = False) -> TreeNode:
+    def choose_child(self, policy: str, pick_first: bool = False) -> TreeNode:
         """
         torna un figlio a casa del nodo con massima/minima utilita
         :return:
         """
-        output_list = self.AMax()
+        output_list = self.AMax(policy)
 
         if pick_first:
             return output_list[0]

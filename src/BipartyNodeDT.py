@@ -41,7 +41,8 @@ class TreeNode:
 
     def __str__(self) -> str:
         node_type = "Decision" if self.is_decision is True else "Chance"
-        base_str = f"{node_type} node {self.id} - {self.height}:\n{self.text}\n[{self.Q_proponent}, {self.Q_opponent}, {self.Q_aggregated}]"
+        base_str = f"{node_type} node {self.id} - {self.height}:\n{self.text}\n[{self.Q_proponent}, {self.Q_opponent}, " \
+                   f"{self.Q_aggregated:.2f}]"
         # for child in self.children:
         #  base_str += f"\n\t{child.id}: {child.text}"
         return base_str

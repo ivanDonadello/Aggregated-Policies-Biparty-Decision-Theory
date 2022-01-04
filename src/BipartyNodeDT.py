@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import pdb
 from operator import attrgetter
 import random
 from typing import List, Type
@@ -89,9 +91,9 @@ class TreeNode:
             n.print_post_order()
         print(self)
 
-    def propagate_utility(self, policy: str) -> None:
+    def propagate_utility(self, policy: str, p: float = 0) -> None:
         for child in self.children:
-            child.propagate_utility(policy=policy)
+            child.propagate_utility(policy=policy, p=p)
         if policy == 'bimaximax':
             if self.isLeaf():  # the node is a leaf
                 self.Q_proponent = self.utility_proponent
@@ -102,33 +104,13 @@ class TreeNode:
                 self.Q_opponent = self.delta * max_utility_child.Q_opponent
             if self.is_decision:
                 self.labelling = max_utility_child
-        elif policy == 'average':
+        elif policy == 'aggregated':
             if self.isLeaf():  # the node is a leaf
-                self.Q_aggregated = (self.utility_proponent + self.utility_opponent) / 2
-                self.Q_proponent = self.utility_proponent
-                self.Q_opponent = self.utility_opponent
-            else:
-                max_utility_child = self.choose_child(policy)
-                self.Q_proponent = self.delta * max_utility_child.Q_proponent
-                self.Q_opponent = self.delta * max_utility_child.Q_opponent
-                self.Q_aggregated = self.delta * max_utility_child.Q_aggregated
-            if self.is_decision:
-                self.labelling = max_utility_child
-        elif policy == 'geometric':
-            if self.isLeaf():  # the node is a leaf
-                self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)
-                self.Q_proponent = self.utility_proponent
-                self.Q_opponent = self.utility_opponent
-            else:
-                max_utility_child = self.choose_child(policy)
-                self.Q_proponent = self.delta * max_utility_child.Q_proponent
-                self.Q_opponent = self.delta * max_utility_child.Q_opponent
-                self.Q_aggregated = self.delta * max_utility_child.Q_aggregated
-            if self.is_decision:
-                self.labelling = max_utility_child
-        elif policy == 'harmonic':
-            if self.isLeaf():  # the node is a leaf
-                self.Q_aggregated = 2 / ((1 / self.utility_proponent) + (1 / self.utility_opponent))
+                if p == 0:
+                    self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)
+                else:
+                    self.Q_aggregated = ((1 / 2) * (self.utility_proponent ** p + self.utility_opponent ** p)) ** (1 / p)
+
                 self.Q_proponent = self.utility_proponent
                 self.Q_opponent = self.utility_opponent
             else:

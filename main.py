@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     # operazioni di decision theory sull'albero
     bdt.root.compute_chance_decision(is_decision_node=True)
-    bdt.root.propagate_utility("harmonic")
+    bdt.root.propagate_utility("bimaximax", -1)
 
     # printing
     bdt.to_pdf("prova")

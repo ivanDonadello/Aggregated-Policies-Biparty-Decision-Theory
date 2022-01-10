@@ -39,19 +39,6 @@ class BipartyDT:
     def reset_results(self):
         self.node_results = []
 
-    def reset_user_model(self):
-        self.user_model = {}
-
-    def set_user_model(self, sample):
-        # Qui ci vuole il filename sugli argomenti interni di ongi nodo :/ va preso dai sample....
-        # dato un nodo id torna quello del figlio in base al profilo. Serve anche il same as e il nome delle colonne.
-        # se N figli hanno stessa utilità prendi il minore, evita effetti random.
-        for arg_id in self.extra_data["inner"]:
-            self.user_model[arg_id] = int(sample[arg_id])
-            if arg_id in self.extra_data["same_as"]:
-                for same_arg in self.extra_data["same_as"][arg_id]:
-                    self.user_model[same_arg] = int(sample[arg_id])
-
     def to_pdf(self, name: str) -> None:
         g = Digraph('G', filename=f'{name}.gv')
         g.attr(rankdir='RL', size='8,5')
@@ -79,42 +66,6 @@ class BipartyDT:
                 leaf_names_list.append(node.id)
         return leaf_list, leaf_names_list
 
-    def generate_random_tree(self, max_height, branching_factors):
-        self.dict_tree = {}
-        # self.root = None
-        last_node_id = 0
-        self.root = TreeNode('0', 'root')
-        self.root.height = 0
-        self.dict_tree['0'] = self.root
-
-        persuasion_goal_node = TreeNode('1', 'persuasion goal')
-        persuasion_goal_node.height = 0
-        last_node_id = 1
-        self.dict_tree['1'] = persuasion_goal_node
-        self.root.add_child(persuasion_goal_node)
-
-        stack = []
-        discovered = []
-        stack.append(persuasion_goal_node)
-        while len(stack) > 0:
-            tmp_node = stack.pop()
-            if tmp_node.id not in discovered:
-                discovered.append(tmp_node)
-                # low weight to nodes with 4 branches to avoid trees with too many leaves
-                branch_factor = np.random.choice(branching_factors, p=[0.45, 0.45, 0.1])
-                for id_offset in range(branch_factor):
-                    last_node_id += 1
-                    id_new_child = str(last_node_id)
-                    new_child = TreeNode(id_new_child, "")
-                    new_child.height = tmp_node.height + 1
-                    tmp_node.add_child(new_child)
-                    self.dict_tree[id_new_child] = new_child
-                    if new_child.height < max_height-1:
-                        stack.append(new_child)
-        _, leaf_ids = self.get_leaves()
-        self.extra_data["frontier"] = leaf_ids
-        self.extra_data["same_as"] = []
-
     def from_csv(self, filename):
         self.dict_tree = {}
         # self.root = None
@@ -125,7 +76,7 @@ class BipartyDT:
             for row in reader:
                 tmp_node = TreeNode(row['id'], row['text'])
                 self.dict_tree[row['id']] = tmp_node
-                if row['support'] == '' and row['attack'] == '': # first node after root
+                if row['support'] == '' and row['attack'] == '':  # first node after root
                     self.root.add_child(tmp_node)
                 elif row['support'] != '':
                     self.dict_tree[row['support']].add_child(tmp_node)
@@ -143,20 +94,27 @@ class BipartyDT:
                 else:
                     node.utility_proponent = random.randint(min_prop, max_prop)
 
-    def prop_utilities_from_json(self, filename):
-        with open(filename) as f:
-            self.extra_data = json.load(f)
-            for arg_id, util_value in self.extra_data["prop_utilities_frontier"].items():
-                self.dict_tree[arg_id].utility_proponent = util_value
-                if arg_id in self.extra_data["same_as"]:
-                    for same_arg in self.extra_data["same_as"][arg_id]:
-                        self.dict_tree[same_arg].utility_proponent = util_value
-
     def results_to_df(self):
         header = ["profile_id", "Node id", "Proponent utility", "Opponent utility", "Q_proponent_root", "Q_opponent_root"]
         output_df = pd.DataFrame(self.node_results, columns=header)
         # output_df.to_csv (r'table_results.csv', index = False, header=True)
         return output_df
+
+    """
+    Non usare le funzioni qui sotto
+    """
+    def reset_user_model(self):
+        self.user_model = {}
+
+    def set_user_model(self, sample):
+        # Qui ci vuole il filename sugli argomenti interni di ongi nodo :/ va preso dai sample....
+        # dato un nodo id torna quello del figlio in base al profilo. Serve anche il same as e il nome delle colonne.
+        # se N figli hanno stessa utilità prendi il minore, evita effetti random.
+        for arg_id in self.extra_data["inner"]:
+            self.user_model[arg_id] = int(sample[arg_id])
+            if arg_id in self.extra_data["same_as"]:
+                for same_arg in self.extra_data["same_as"][arg_id]:
+                    self.user_model[same_arg] = int(sample[arg_id])
 
     def predict(self, data_df, use_user_model=False):
         self.reset_results()
@@ -211,14 +169,6 @@ class BipartyDT:
                 output_list = [el[0] for el in tmp_list if el[1] == best[1]]
                 random_node = random.choice(output_list)
                 selected_node = self.dict_tree[random_node]
-        else: # if simulated
-            pass # TODO interactive mode
+        else:  # if simulated
+            pass  # TODO interactive mode
         return selected_node
-
-    def set_opponent_utilities(self, sample, predicted=False):
-        for id_arg in self.extra_data["frontier"]:
-            self.dict_tree[id_arg].utility_opponent = int(sample[id_arg]) if type(sample[id_arg]) is str else sample[id_arg]
-
-            if id_arg in self.extra_data["same_as"]:
-                for same_arg in self.extra_data["same_as"][id_arg]:
-                    self.dict_tree[same_arg].utility_opponent = int(sample[id_arg]) if type(sample[id_arg]) is str else sample[id_arg]

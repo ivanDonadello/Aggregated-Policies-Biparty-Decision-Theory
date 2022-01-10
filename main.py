@@ -1,40 +1,35 @@
 import pdb
 from src.BipartyNodeDT import TreeNode
-from src.BipartyDT import BipartyDT
+from src.SimulationsAG import BipartyDT
+import settings
+import os
 
 if __name__ == "__main__":
-    root = TreeNode("0", "")
-    n2 = TreeNode("n2", "Low red meat consumption is necessary for a healthy diet.")
-    n3 = TreeNode("n3", "It is really difficult to change diet.")
-    n4 = TreeNode("n4", "I really like the taste of meat.")
-    n5 = TreeNode("n5", "Think about the benefits of reducing red meat.")
-    n6 = TreeNode("n6", "Try to reduce red meat slowly.")
-    n7 = TreeNode("n7", "White meat can be an alternative.")
-    n8 = TreeNode("n8", "Fish is a tasty alternative to meat.")
-    n5.set_utility_opponent(3)
-    n5.set_utility_proponent(9)
-    n6.set_utility_opponent(4)
-    n6.set_utility_proponent(6)
-    n7.set_utility_opponent(1)
-    n7.set_utility_proponent(2)
-    n8.set_utility_opponent(2)
-    n8.set_utility_proponent(4)
+    for tree_id in settings.num_trees:
+        bdt = BipartyDT()
+        bdt.from_csv(os.path.join(settings.tree_folder, f"tree_{tree_id}"))
+        bdt.root.compute_chance_decision(is_decision_node=True, height=0)
+        tree_leaves = bdt.get_leaves()
+        tree_number_leaves = len(tree_leaves)
+        tree_height = tree_leaves[0].height
+        for population_id in settings.num_populations:
 
-    # Creazione albero
-    root.add_child(n2)
-    n2.set_children([n4, n3])
-    n3.set_children([n5, n6])
-    n4.set_children([n7, n8])
 
-    # incapsulamento albero
-    bdt = BipartyDT()
-    bdt.root = root
-    # dict tree l'ho fatta in quanto semplifica il codice di certe funzioni
-    bdt.dict_tree = {0: root, 1: n2, 2: n3, 3: n4, 4: n5, 5: n6, 6: n7, 7: n8}
+            # Parte 1: lo scaling
+            # carica il file delle utilità di popolazione (usa sempre os.path.join)
+            # puoi usare np.genfromtxt per caricare il file in una tabella oppure anche pandas
+            # trova il minimo escludendo la colonna degli id e la prima riga
+            # somma alla tabella caricata (escludendo la colonna degli id e la prima riga) il minimo trovato sopra + 1
 
-    # operazioni di decision theory sull'albero
-    bdt.root.compute_chance_decision(is_decision_node=True)
-    bdt.root.propagate_utility("bimaximax", -1)
+            # Parte 2: il bottom up
+            # per ogni sample nella tabella caricata
+                # metti nell'albero le corrispondenti utilità della popolazione
+                # va implementata una nuova funzione in SimulationsAG che puoi chiamare set_util_opp(sample)
+                for policy in settings.policies:
+                    bdt.propagate_utility(policy[0], policy[1])
+                    # salvare le Q (opp e prop alla root) per ogni sample in una tabella risultati con le seguenti colonne:
+                    # sample_id, tree_id, tree_height, tree_number_leaves, population_id, policy, root_Q_opp, root_Q_prop
 
-    # printing
-    bdt.to_pdf("prova")
+
+            # Parte 3: plot tramite heatmap della tabella dei risultati
+            # da fare, forse meglio creare una classe dedicata in un file a parte dentro src

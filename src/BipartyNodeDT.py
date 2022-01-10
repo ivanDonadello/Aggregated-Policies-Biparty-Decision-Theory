@@ -49,11 +49,13 @@ class TreeNode:
         #  base_str += f"\n\t{child.id}: {child.text}"
         return base_str
 
-    def compute_chance_decision(self, is_decision_node: bool) -> None:
+    def compute_chance_decision(self, is_decision_node: bool, height: int) -> None:
         self.is_decision = is_decision_node
+        self.height = height
         child_type = False if is_decision_node is True else True
+        height += 1
         for child in self.children:
-            child.compute_chance_decision(child_type)
+            child.compute_chance_decision(child_type, height)
 
     def isLeaf(self) -> bool:
         return True if len(self.children) == 0 else False

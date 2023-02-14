@@ -27,10 +27,12 @@ if __name__ == "__main__":
     # Creazione albero
     root.add_child(n4)
     n4.set_children([n7, n8])
+
+    # ---- IMPORTANT -----
+    # the dict_tree below is not the same as defined in line 35 (bdt.dict_tree).
+    # Is a different dict to calculate the matrix and print it in the console
     root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
-
     root.propagate_utility("bimaximax", -1)
-
     ConsolePrint.print_tree(root, 'bimaximax', -1)
 
     p_values = [[0, 'geometric'], [-1, 'hm'], [1], [2], [3, 'cubic'], [100, 'prod'], [101, 'mean/std'],

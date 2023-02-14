@@ -35,6 +35,9 @@ if __name__ == "__main__":
     bdt.dict_tree = {0: root, 1: n2, 2: n3, 3: n4, 4: n5, 5: n6, 6: n7, 7: n8}
 
     # operazioni di decision theory sull'albero
+    # ---- IMPORTANT -----
+    # the dict_tree below is not the same as defined in line 35 (bdt.dict_tree).
+    # Is a different dict to calculate the matrix and print it in the console
     bdt.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
     bdt.root.propagate_utility("bimaximax", -1)
     ConsolePrint.print_tree(root, 'bimaximax', -1)

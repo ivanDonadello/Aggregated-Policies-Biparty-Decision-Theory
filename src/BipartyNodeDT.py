@@ -1,6 +1,6 @@
 from __future__ import annotations
-
-import pdb
+import statistics
+#import pdb
 from operator import attrgetter
 import random
 from typing import List, Type
@@ -16,6 +16,7 @@ class TreeNode:
     delta = 1.0
 
     def __init__(self, _id, text) -> None:
+        self.dict_tree = None
         self.labelling: TreeNode = None
         self.text: str = text
         self.height: int = -1
@@ -49,13 +50,23 @@ class TreeNode:
         #  base_str += f"\n\t{child.id}: {child.text}"
         return base_str
 
-    def compute_chance_decision(self, is_decision_node: bool, height: int) -> None:
+    def compute_chance_decision(self, is_decision_node: bool, height: int, dict_tree) -> None:
         self.is_decision = is_decision_node
         self.height = height
         child_type = False if is_decision_node is True else True
         height += 1
+        try:
+            dict_tree[self.height].append(self)
+        except:
+            dict_tree[self.height] = [self]
+
         for child in self.children:
-            child.compute_chance_decision(child_type, height)
+            if child.isLeaf():
+                child_type = False
+            child.compute_chance_decision(child_type, height, dict_tree)
+
+        if self.id == 'n0':
+            self.dict_tree = dict_tree
 
     def isLeaf(self) -> bool:
         return True if len(self.children) == 0 else False
@@ -110,6 +121,21 @@ class TreeNode:
             if self.isLeaf():  # the node is a leaf
                 if p == 0:
                     self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)
+                elif p == 100:
+                    prod = np.prod([self.utility_proponent, self.utility_opponent])
+                    self.Q_aggregated = np.prod(prod)
+                elif p == 101:
+                    mean = statistics.mean([self.utility_proponent, self.utility_opponent])
+                    std = np.std([self.utility_proponent, self.utility_opponent])
+                    if std == 0:
+                        std = 1
+                    self.Q_aggregated = (mean / std) if std > 1 else (mean * std)
+                elif p == 102:
+                    mean = statistics.mean([self.utility_proponent, self.utility_opponent])
+                    stdev = statistics.stdev([self.utility_proponent, self.utility_opponent])
+                    if stdev == 0:
+                        stdev = 1
+                    self.Q_aggregated = (mean / stdev) if stdev > 1 else (mean * stdev)
                 else:
                     self.Q_aggregated = ((1 / 2) * (self.utility_proponent ** p + self.utility_opponent ** p)) ** (1 / p)
 

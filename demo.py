@@ -1,9 +1,11 @@
 import pdb
 from src.BipartyNodeDT import TreeNode
 from src.SimulationsAG import BipartyDT
+import src.ConsolePrint as ConsolePrint
+
 
 if __name__ == "__main__":
-    root = TreeNode("0", "")
+    root = TreeNode("n0", "")
     n2 = TreeNode("n2", "Low red meat consumption is necessary for a healthy diet.")
     n3 = TreeNode("n3", "It is really difficult to change diet.")
     n4 = TreeNode("n4", "I really like the taste of meat.")
@@ -33,8 +35,18 @@ if __name__ == "__main__":
     bdt.dict_tree = {0: root, 1: n2, 2: n3, 3: n4, 4: n5, 5: n6, 6: n7, 7: n8}
 
     # operazioni di decision theory sull'albero
-    bdt.root.compute_chance_decision(is_decision_node=True, height=0)
+    bdt.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
     bdt.root.propagate_utility("bimaximax", -1)
+    ConsolePrint.print_tree(root, 'bimaximax', -1)
+
+    p_values = [[0, 'geometric'], [-1, 'hm'], [1], [2], [3, 'cubic'], [100, 'prod'], [101, 'mean/std'],
+                [102, 'mean/stdev']]
+
+    for p in p_values:    #
+        root.propagate_utility("aggregated", p[0])
+        ConsolePrint.print_tree(root, 'aggregated', p)
+
+
 
     # printing
-    bdt.to_pdf("prova")
+    #bdt.to_pdf("prova")

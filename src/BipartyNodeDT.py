@@ -104,9 +104,9 @@ class TreeNode:
             n.print_post_order()
         print(self)
 
-    def propagate_utility(self, policy: str, p: float = 0) -> None:
+    def propagate_utility(self, policy: str, p: float = 0, v: str = 'prod') -> None:
         for child in self.children:
-            child.propagate_utility(policy=policy, p=p)
+            child.propagate_utility(policy=policy, p=p, v=v)
         if policy == 'bimaximax':
             if self.isLeaf():  # the node is a leaf
                 self.Q_proponent = self.utility_proponent
@@ -119,25 +119,30 @@ class TreeNode:
                 self.labelling = max_utility_child
         elif policy == 'aggregated':
             if self.isLeaf():  # the node is a leaf
-                if p == 0:
-                    self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)
-                elif p == 100:
-                    prod = np.prod([self.utility_proponent, self.utility_opponent])
-                    self.Q_aggregated = np.prod(prod)
-                elif p == 101:
-                    mean = statistics.mean([self.utility_proponent, self.utility_opponent])
-                    std = np.std([self.utility_proponent, self.utility_opponent])
-                    if std == 0:
-                        std = 1
-                    self.Q_aggregated = (mean / std) if std > 1 else (mean * std)
-                elif p == 102:
-                    mean = statistics.mean([self.utility_proponent, self.utility_opponent])
-                    stdev = statistics.stdev([self.utility_proponent, self.utility_opponent])
-                    if stdev == 0:
-                        stdev = 1
-                    self.Q_aggregated = (mean / stdev) if stdev > 1 else (mean * stdev)
+
+                if np.isnan(p):
+                    if v == 'prod':
+                        prod = np.prod([self.utility_proponent, self.utility_opponent])
+                        self.Q_aggregated = np.prod(prod)
+
+                    elif v == 'mean/std':
+                        mean = statistics.mean([self.utility_proponent, self.utility_opponent])
+                        std = np.std([self.utility_proponent, self.utility_opponent])
+                        if std == 0:
+                            std = 1
+                        self.Q_aggregated = (mean / std) if std > 1 else (mean * std)
+
+                    elif v == 'mean/stdev':
+                        mean = statistics.mean([self.utility_proponent, self.utility_opponent])
+                        stdev = statistics.stdev([self.utility_proponent, self.utility_opponent])
+                        if stdev == 0:
+                            stdev = 1
+                        self.Q_aggregated = (mean / stdev) if stdev > 1 else (mean * stdev)
                 else:
-                    self.Q_aggregated = ((1 / 2) * (self.utility_proponent ** p + self.utility_opponent ** p)) ** (1 / p)
+                    if p == 0:
+                        self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)
+                    else:
+                        self.Q_aggregated = ((1 / 2) * (self.utility_proponent ** p + self.utility_opponent ** p)) ** (1 / p)
 
                 self.Q_proponent = self.utility_proponent
                 self.Q_opponent = self.utility_opponent

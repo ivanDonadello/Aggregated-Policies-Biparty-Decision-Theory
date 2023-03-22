@@ -7,8 +7,7 @@ def print_tree(root, agg_function, p):
 
     height = list(tree.keys())[-1]
     lenght_leaf = len(tree[height])
-
-    N = lenght_leaf * 2 + 1
+    N = int(lenght_leaf * 3)
     arr_print = np.full([height+1, N],"-", dtype=np.object)
     idx_matrix = []
     arr = np.arange(N)
@@ -45,7 +44,9 @@ def print_tree(root, agg_function, p):
     # space = ' '  # size for ID
 
     print('---------------------------------------------------------------')
-    print(int((N/4)) * space, 'Policy type: {} | p = {}'.format(agg_function, p))
+    #print(int((N/4)) * space, 'Policy type: {} | p = {}'.format(agg_function, p))
+    print(1 * space, 'Policy type: {} | p = {}'.format(agg_function, p))
+    print(1 * space, 'The caption for each is the following  >  [opponent, proponent, aggregated, id]')
     print()
 
     # PRINTING THE NODES IN ORDER
@@ -54,7 +55,11 @@ def print_tree(root, agg_function, p):
             if node == '-':
                 print(space, end='')
             else:
-                result = ('[{:.0f},{:.0f},{:.1f}]'.format(node.Q_opponent, node.Q_proponent, node.Q_aggregated))
+                if node.Q_opponent == -1:
+                    result = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.utility_opponent, node.utility_proponent,
+                                                              node.Q_aggregated, node.id))
+                else:
+                    result = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.Q_opponent, node.Q_proponent, node.Q_aggregated, node.id))
                 # result= node.id
                 print(result, end='')
 

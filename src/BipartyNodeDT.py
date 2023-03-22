@@ -65,7 +65,7 @@ class TreeNode:
                 child_type = False
             child.compute_chance_decision(child_type, height, dict_tree)
 
-        if self.id == 'n0':
+        if self.id == 'n0' or self.id == '0':
             self.dict_tree = dict_tree
 
     def isLeaf(self) -> bool:

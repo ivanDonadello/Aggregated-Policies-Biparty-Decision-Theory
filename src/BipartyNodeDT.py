@@ -167,3 +167,9 @@ class TreeNode:
             return output_list[0]
         else:
             return random.choice(output_list)
+
+    def get_tree_height(self):
+        return list(self.dict_tree.keys())[-1]
+
+    def get_AD(self):
+        return abs((self.Q_proponent - self.Q_opponent))

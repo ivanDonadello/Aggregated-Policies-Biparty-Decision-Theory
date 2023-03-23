@@ -16,10 +16,13 @@ p_values = [[-1, '-1'], [0, '0'], [1, '1'], [2, '2'], [3, '3']]  # , [NaN, 'mean
 # pd.set_option('display.max_columns', None)  # use only to console print pandas DF
 # pd.set_option('display.max_rows', None)
 
-sim_ds_columns = ['Tree_id','Population_id','Sample_id','Q_prop (bimax)','Q_opp (bimax)']
+# tree_height
+# ============== SETTING UP THE FIRST COLUMNS OF THE FINAL DATASET ==============
+sim_ds_columns = ['Tree_id', 'Population_id', 'Sample_id', 'tree_height', 'Q_prop (bimax)', 'Q_opp (bimax)', 'AD (bimax)']
 for p in p_values:
     sim_ds_columns.append(f'Q_prop ({p[1]})')
     sim_ds_columns.append(f'Q_opp ({p[1]})')
+    sim_ds_columns.append(f'AD ({p[1]})')
 
 print(sim_ds_columns)
 sim_data = []  # vector/matrix used to append and store raw data (rows) to then construct the pandas DF
@@ -52,15 +55,18 @@ for tree_id in range(10):
             # ============== PROPAGATE UTILITY ==============
             bdt.root.propagate_utility("bimaximax", -1, '')
             # ============== (RE)CREATE ROW OF VALUES ==============
-            row_result = [tree_id, tree_pop, col]
+            row_result = [tree_id, tree_pop, col, bdt.root.get_tree_height()]
             # ============== APPEND VALUES FOR GIVEN POLICY ==============
             row_result.append(bdt.root.Q_proponent)
             row_result.append(bdt.root.Q_opponent)
+            row_result.append(bdt.root.get_AD())
+
 
             for p in p_values:  #
                 bdt.root.propagate_utility("aggregated", p[0], p[1])
                 row_result.append(bdt.root.Q_proponent)
                 row_result.append(bdt.root.Q_opponent)
+                row_result.append(bdt.root.get_AD())
 
             sim_data.append(row_result)
 

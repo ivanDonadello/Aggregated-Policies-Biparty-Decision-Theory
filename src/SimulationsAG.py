@@ -9,6 +9,7 @@ import json
 import re
 from graphviz import Digraph
 from typing import Dict, Type
+import ast
 
 
 def render_text(input_string):
@@ -25,6 +26,7 @@ class BipartyDT:
     """
     def __init__(self):
         self.dict_tree: Dict[str, TreeNode] = None
+        self.dict_children = {}
         self.root: TreeNode = None
         self.node_results = []
         self.user_model = {}
@@ -34,7 +36,9 @@ class BipartyDT:
         for _, node in self.dict_tree.items():
             node.Q_opponent = -1
             node.Q_proponent = -1
+            node.Q_aggregated = -1
             node.utility_opponent = -1
+
 
     def reset_results(self):
         self.node_results = []
@@ -74,14 +78,43 @@ class BipartyDT:
         with open(filename) as f:
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
-                tmp_node = TreeNode(row['id'], row['text'])
-                self.dict_tree[row['id']] = tmp_node
+                print(row)
+                tmp_node = TreeNode(row["id"], row["text"])
+                self.dict_tree[row["id"]] = tmp_node
                 if row['support'] == '' and row['attack'] == '':  # first node after root
                     self.root.add_child(tmp_node)
                 elif row['support'] != '':
                     self.dict_tree[row['support']].add_child(tmp_node)
                 else:
                     self.dict_tree[row['attack']].add_child(tmp_node)
+
+    def from_csv_new(self, filename):
+        self.dict_tree = {}
+        self.dict_children = {}
+        self.root = None
+        id = "Node_id"
+        type = "Type"
+        children_ids = "Children_ids"
+        utility_p = "Utility_proponent"
+        utility_o = "Utility_opponent"
+
+        with open(filename) as f:
+            reader = csv.DictReader(f)  # , delimiter='\t')
+            for row in reader:
+                tmp_node = TreeNode(row[id], row[type])
+                tmp_node.set_utility_proponent(int(row[utility_p]))
+                tmp_node.set_utility_opponent(int(row[utility_o]))
+                self.dict_tree[row[id]] = tmp_node
+                self.dict_children[row[id]] = ast.literal_eval(row[children_ids])
+
+        for i in self.dict_children:
+            children = self.dict_children[i]
+            if len(children) > 0:
+                for child in children:
+                    self.dict_tree[i].add_child(self.dict_tree[child])
+
+        self.root = self.dict_tree['0']
+
 
     def random_utilities(self, agent='both', min_opp=1, max_opp=11, min_prop=1, max_prop=11):
         for id, node in self.dict_tree.items():

@@ -31,10 +31,15 @@ for pair in paired_axis_values:
          stack().reset_index().rename(columns={0:'Frequency'})
 
     df2 = df.drop_duplicates().pivot_table(index=col1, columns=col2, values='Frequency', sort=False)
-    print(df2)
+    if 1.0 not in df2.index:
+        df2.loc[1.0] = 0
+        df2.sort_index(inplace=True)
+
+    sns.set(font_scale=0.8)
+    plt.figure(figsize=(15,10))
     ax = sns.heatmap(df2, cmap='coolwarm', square=True, linewidth=0.5, xticklabels=True, yticklabels=True, center=1,
                 annot=True, annot_kws={"size": 6}, fmt='g')
-    sns.set(font_scale=0.8)
+
     ax.invert_yaxis()
     plt.savefig(f'../data/heatmap/fig_{fig_name}.png')
     plt.clf()

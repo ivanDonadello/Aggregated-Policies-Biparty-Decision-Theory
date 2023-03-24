@@ -46,7 +46,7 @@ for tree_id in range(10):
         df_normalized = ds_population.apply(sum_by_value, axis=1, args=(min_val,))
 
         # ============== UPDATE UTILITIES ==============
-        for col in range(5):  # len(df_normalized)):  # to change to the whole DS >> len(df_normalized)
+        for col in range(len(df_normalized)):  # len(df_normalized)):  # to change to the whole DS >> len(df_normalized)
             bdt.reset_opponent_utilities()
             columns_values = df_normalized.iloc[col]
             for i in range(len(columns)):

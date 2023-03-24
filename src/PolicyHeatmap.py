@@ -19,6 +19,7 @@ for item in column_list:
 paired_axis_values = list(zip(axis_values,axis_values[1:]))[::2]
 
 for pair in paired_axis_values:
+
     col1 = pair[0]
     col2 = pair[1]
     fig_name = col1[col1.find("(") + 1:col1.find(")")]
@@ -26,12 +27,14 @@ for pair in paired_axis_values:
     bimax_ds = ds[[col1, col2]]
     df = bimax_ds # bimax_ds.groupby([col1, col2]).size()
 
-    df = pd.crosstab(df[col1],df[col2]).replace(0,np.nan).\
+    df = pd.crosstab(df[col1],df[col2]).replace(0,0).\
          stack().reset_index().rename(columns={0:'Frequency'})
 
     df2 = df.drop_duplicates().pivot_table(index=col1, columns=col2, values='Frequency', sort=False)
-    ax = sns.heatmap(df2, cmap='coolwarm', square=True, linewidth=0.5, xticklabels=True, yticklabels=True, center=1, vmin= 0, vmax=60,
-                annot=True, annot_kws={"size": 7})
+    print(df2)
+    ax = sns.heatmap(df2, cmap='coolwarm', square=True, linewidth=0.5, xticklabels=True, yticklabels=True, center=1,
+                annot=True, annot_kws={"size": 6}, fmt='g')
+    sns.set(font_scale=0.8)
     ax.invert_yaxis()
-    #plt.show()
-    ax.get_figure().savefig(f'../data/heatmap/fig_{fig_name}.png')
+    plt.savefig(f'../data/heatmap/fig_{fig_name}.png')
+    plt.clf()

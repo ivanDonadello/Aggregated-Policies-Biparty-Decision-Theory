@@ -28,6 +28,7 @@ class TreeNode:
         self.Q_opponent: int = -1
         self.Q_aggregated: int = -1
         self.is_decision: bool = False # if it is a chance or decision node
+        self.location = 0
 
     def set_utility_proponent(self, value: int) -> None:
         self.utility_proponent = value

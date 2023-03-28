@@ -11,7 +11,6 @@ bdt.load_tree(tree_id)
 print(bdt.root.dict_tree)
 ConsolePrint.print_tree(bdt.root, 'bimaximax', -1)
 
-path = 'csv_policy_experiments.csv'
 bdt.preproc_dataset(tree_id,population_id)
 bdt.set_utilities(row_id)
 

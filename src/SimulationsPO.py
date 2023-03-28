@@ -1,13 +1,18 @@
 import settings
 from src.BipartyNodeDT import TreeNode
 import csv
-import re
-from graphviz import Digraph
+import pandas as pd
 from typing import Dict, Type
 import ast
 import os
 
 # Class that is used to run Simulations for POlicy/POpulation experiments
+
+
+def sum_by_value(x, y):
+    result = (x + abs(y)) + 1
+    return result
+
 
 class BipartyDT:
     """
@@ -20,6 +25,7 @@ class BipartyDT:
         self.node_results = []
         self.user_model = {}
         self.extra_data = {}
+        self.df_normalized = None
 
     def reset_opponent_utilities(self):
         for _, node in self.dict_tree.items():
@@ -71,6 +77,23 @@ class BipartyDT:
         self.from_csv(os.path.join(settings.tree_folder, f"tree_{tree_id}.csv"))
         self.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
         #self.dict_tree = self.root.dict_tree
+
+    def preproc_dataset(self, tree_id, population_id, scaler='min'):
+        path_pop = os.path.join(settings.population_folder, f"tree_{tree_id}_population_{population_id}.csv")
+        df_population = pd.read_csv(path_pop)
+        df_population = df_population.drop('id', axis=1)
+        df_population = df_population.drop(index=0)
+
+        min_val = df_population.min()
+        self.df_normalized = df_population.apply(sum_by_value, args=(min_val,), axis=1)
+
+    def set_utilities(self, row_id):
+        self.reset_opponent_utilities()
+        columns_values = self.df_normalized.iloc[row_id]
+        columns = self.df_normalized.columns.values
+        for i in range(len(columns)):
+            self.dict_tree[columns[i]].set_utility_opponent(columns_values[i])
+
 
 
 

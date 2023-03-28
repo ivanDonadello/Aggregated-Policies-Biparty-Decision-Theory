@@ -37,7 +37,7 @@ for pair in paired_axis_values:
 
     sns.set(font_scale=0.8)
     plt.figure(figsize=(9,7))
-    ax = sns.heatmap(df2, cmap='coolwarm', square=True, linewidth=0.5, xticklabels=True, yticklabels=True, center=1,
+    ax = sns.heatmap(df2, cmap='coolwarm', square=False, linewidth=0.5, xticklabels=True, yticklabels=True, center=1,
                 annot=True, annot_kws={"size": 6}, fmt='g')
 
     ax.invert_yaxis()

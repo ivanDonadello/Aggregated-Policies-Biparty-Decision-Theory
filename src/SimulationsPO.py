@@ -74,13 +74,20 @@ class BipartyDT:
         self.root = self.dict_tree['0']
 
     def load_tree(self, tree_id, folder=settings.tree_folder):
-        self.from_csv(os.path.join(folder, f"tree_{tree_id}.csv"))
+        try:
+            self.from_csv(os.path.join(folder, f"tree_{tree_id}.csv"))
+        except:
+            self.from_csv(os.path.join('../',folder, f"tree_{tree_id}.csv"))
         self.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
         #self.dict_tree = self.root.dict_tree
 
     def preproc_dataset(self, tree_id, population_id, scaler='min'):
-        path_pop = os.path.join(settings.population_folder, f"tree_{tree_id}_population_{population_id}.csv")
-        df_population = pd.read_csv(path_pop)
+        try:
+            path_pop = os.path.join(settings.population_folder, f"tree_{tree_id}_population_{population_id}.csv")
+            df_population = pd.read_csv(path_pop)
+        except:
+            path_pop = os.path.join('../',settings.population_folder, f"tree_{tree_id}_population_{population_id}.csv")
+            df_population = pd.read_csv(path_pop)
         df_population = df_population.drop('id', axis=1)
         df_population = df_population.drop(index=0)
 

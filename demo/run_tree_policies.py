@@ -2,9 +2,9 @@ from src.SimulationsPO import BipartyDT
 import src.ConsolePrint as ConsolePrint
 
 # select the tree
-tree_id = 2
+tree_id = 1
 # select the population
-population_id = 5
+population_id = 0
 # select the row for the given populationDS
 row_id = 0
 # select the policies

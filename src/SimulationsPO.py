@@ -37,14 +37,14 @@ class BipartyDT:
     def reset_results(self):
         self.node_results = []
 
-    # def get_leaves(self):
-    #     leaf_list = []
-    #     leaf_names_list = []
-    #     for _, node in self.dict_tree.items():
-    #         if node.isLeaf():
-    #             leaf_list.append(node)
-    #             leaf_names_list.append(node.id)
-    #     return leaf_list, leaf_names_list
+    def get_leaves(self):
+        leaf_list = []
+        leaf_names_list = []
+        for _, node in self.dict_tree.items():
+            if node.isLeaf():
+                leaf_list.append(node)
+                leaf_names_list.append(node.id)
+        return leaf_list, leaf_names_list
 
     def from_csv(self, filename):
         self.dict_tree = {}
@@ -73,8 +73,8 @@ class BipartyDT:
 
         self.root = self.dict_tree['0']
 
-    def load_tree(self, tree_id):
-        self.from_csv(os.path.join(settings.tree_folder, f"tree_{tree_id}.csv"))
+    def load_tree(self, tree_id, folder=settings.tree_folder):
+        self.from_csv(os.path.join(folder, f"tree_{tree_id}.csv"))
         self.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
         #self.dict_tree = self.root.dict_tree
 
@@ -94,7 +94,8 @@ class BipartyDT:
         for i in range(len(columns)):
             self.dict_tree[columns[i]].set_utility_opponent(columns_values[i])
 
-
+    def get_tree_height(self):
+        return list(self.dict_tree.keys())[-1]
 
 
 

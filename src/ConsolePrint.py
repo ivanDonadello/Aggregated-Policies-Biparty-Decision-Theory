@@ -40,12 +40,12 @@ def print_tree(root, agg_function, p, show_id=False):
         for node in tree[height]:
             arr_print[height][node.location] = node
             if node.Q_opponent == -1:
-                size_nodes.append(len(str('[{:.0f},{:.0f},{:.0f}]'.format(node.utility_opponent, node.utility_proponent,
+                size_nodes.append(len(str('[{:.0f},{:.0f},{:.0f}]'.format(node.utility_proponent, node.utility_opponent,
                                                               node.Q_aggregated))))
             else:
-                size_nodes.append(len(str('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.Q_opponent, node.Q_proponent, node.Q_aggregated, node.id))))
+                size_nodes.append(len(str('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.Q_proponent, node.utility_opponent, node.Q_aggregated, node.id))))
 
-    size_space = max(size_nodes)
+    size_space = max(size_nodes) -3
     space = ' ' * size_space # if we get the size of the bigger string will be better?
 
     print('---------------------------------------------------------------')
@@ -64,10 +64,10 @@ def print_tree(root, agg_function, p, show_id=False):
             else:
                 if node.Q_opponent == -1:
                     if show_id:
-                        sentence = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.utility_opponent, node.utility_proponent,
+                        sentence = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.Q_proponent, node.utility_opponent,
                                                               node.Q_aggregated, node.id))
                     else:
-                        sentence = ('[{:.0f},{:.0f},{:.0f}]'.format(node.utility_opponent, node.utility_proponent,
+                        sentence = ('[{:.0f},{:.0f},{:.0f}]'.format(node.utility_proponent, node.utility_opponent,
                                                               node.Q_aggregated))
                     size_node = len(sentence)
                     centering_value = np.floor((size_space - size_node) / 2)
@@ -75,9 +75,9 @@ def print_tree(root, agg_function, p, show_id=False):
 
                 else:
                     if show_id:
-                        sentence = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.Q_opponent, node.Q_proponent, node.Q_aggregated, node.id))
+                        sentence = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.utility_proponent, node.Q_opponent, node.Q_aggregated, node.id))
                     else:
-                        sentence = ('[{:.0f},{:.0f},{:.0f}]'.format(node.Q_opponent, node.Q_proponent, node.Q_aggregated))
+                        sentence = ('[{:.0f},{:.0f},{:.0f}]'.format(node.Q_proponent, node.Q_opponent, node.Q_aggregated))
                     size_node = len(sentence)
                     centering_value = np.floor((size_space - size_node)/2)
                     rest = (size_space - size_node) % 2

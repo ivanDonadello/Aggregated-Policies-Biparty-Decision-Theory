@@ -2,9 +2,10 @@ import pdb
 from src.BipartyNodeDT import TreeNode
 from src.SimulationsAG import BipartyDT
 import src.ConsolePrint as ConsolePrint
-
+NaN = float('nan')
 
 if __name__ == "__main__":
+    # define the tree
     root = TreeNode("n0", "")
     n2 = TreeNode("n2", "Low red meat consumption is necessary for a healthy diet.")
     n3 = TreeNode("n3", "It is really difficult to change diet.")
@@ -13,14 +14,17 @@ if __name__ == "__main__":
     n6 = TreeNode("n6", "Try to reduce red meat slowly.")
     n7 = TreeNode("n7", "White meat can be an alternative.")
     n8 = TreeNode("n8", "Fish is a tasty alternative to meat.")
-    n5.set_utility_opponent(3)
-    n5.set_utility_proponent(9)
-    n6.set_utility_opponent(4)
-    n6.set_utility_proponent(6)
-    n7.set_utility_opponent(1)
-    n7.set_utility_proponent(2)
-    n8.set_utility_opponent(2)
-    n8.set_utility_proponent(4)
+    n5.set_utility_opponent(2)
+    n5.set_utility_proponent(7)
+    n6.set_utility_opponent(5)
+    n6.set_utility_proponent(5)
+    n7.set_utility_opponent(3)
+    n7.set_utility_proponent(7)
+    n8.set_utility_opponent(6)
+    n8.set_utility_proponent(6)
+
+    # array of policies to be applied
+    policies = [[-1, 'agg'], [0.5, 'SMD'], [0.9, 'DON']]
 
     # Creazione albero
     root.add_child(n2)
@@ -35,22 +39,11 @@ if __name__ == "__main__":
     bdt.dict_tree = {0: root, 1: n2, 2: n3, 3: n4, 4: n5, 5: n6, 6: n7, 7: n8}
 
     # operazioni di decision theory sull'albero
-    # ---- IMPORTANT -----
-    # the dict_tree below is not the same as defined in line 35 (bdt.dict_tree).
-    # Is a different dict to calculate the matrix and print it in the console
-    NaN = float('nan')
     bdt.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
     bdt.root.propagate_utility("bimaximax", -1, '')
     ConsolePrint.print_tree(root, 'bimaximax', -1)
 
-    p_values = [[0, 'geometric'], [-1, 'hm'], [1, ''], [2, ''], [3, 'cubic'], [NaN, 'prod'], [NaN, 'mean/std'],
-                [NaN, 'mean/stdev']]
-
-    for p in p_values:  #
+    for p in policies:  #
         root.propagate_utility("aggregated", p[0], p[1])
-        ConsolePrint.print_tree(root, 'aggregated', p)
+        ConsolePrint.print_tree(root, 'aggregated', p, show_id=False)
 
-
-
-    # printing
-    #bdt.to_pdf("prova")

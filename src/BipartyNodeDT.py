@@ -93,8 +93,15 @@ class TreeNode:
         output_list.append(max_util_node)
         for i in range(0, len(tmp_list) - 1):
             if self.is_decision:
-                if max_util_node.Q_proponent == tmp_list[i].Q_proponent:
-                    output_list.append(tmp_list[i])
+                # if max_util_node.Q_proponent == tmp_list[i].Q_proponent:
+                #     output_list.append(tmp_list[i])
+                if policy == 'bimaximax':
+                    if max_util_node.Q_proponent == tmp_list[i].Q_proponent:
+                        output_list.append(tmp_list[i])
+                else:
+                    if max_util_node.Q_aggregated == tmp_list[i].Q_aggregated:
+                        output_list.append(tmp_list[i])
+
             else:
                 if max_util_node.Q_opponent == tmp_list[i].Q_opponent:
                     output_list.append(tmp_list[i])
@@ -106,6 +113,7 @@ class TreeNode:
         print(self)
 
     def propagate_utility(self, policy: str, p: float = 0, v: str = 'prod') -> None:
+        #print(f'p = {p} | v = {v}')
         for child in self.children:
             child.propagate_utility(policy=policy, p=p, v=v)
         if policy == 'bimaximax':
@@ -121,25 +129,20 @@ class TreeNode:
         elif policy == 'aggregated':
             if self.isLeaf():  # the node is a leaf
 
-                if np.isnan(p):
-                    if v == 'prod':
-                        prod = np.prod([self.utility_proponent, self.utility_opponent])
-                        self.Q_aggregated = np.prod(prod)
+                if v == 'SMD':
+                    q_prop = self.utility_proponent
+                    q_opp = self.utility_opponent
+                    w = p
+                    score = ((1 - w) * (q_prop + q_opp)) - (w * abs(q_prop - q_opp))
+                    self.Q_aggregated = score
 
-                    elif v == 'mean/std':
-                        mean = statistics.mean([self.utility_proponent, self.utility_opponent])
-                        std = np.std([self.utility_proponent, self.utility_opponent])
-                        if std == 0:
-                            std = 1
-                        self.Q_aggregated = (mean / std) if std > 1 else (mean * std)
+                if v == 'DON':
+                    U = [self.utility_proponent,self.utility_opponent]
+                    w = p
+                    score = (w * np.linalg.norm(U, ord=1) ** 2) - ((1 - w) * np.linalg.norm(U, ord=1))
+                    self.Q_aggregated = score
 
-                    elif v == 'mean/stdev':
-                        mean = statistics.mean([self.utility_proponent, self.utility_opponent])
-                        stdev = statistics.stdev([self.utility_proponent, self.utility_opponent])
-                        if stdev == 0:
-                            stdev = 1
-                        self.Q_aggregated = (mean / stdev) if stdev > 1 else (mean * stdev)
-                else:
+                elif v == 'agg':
                     if p == 0:
                         self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)
                     else:
@@ -174,3 +177,6 @@ class TreeNode:
 
     def get_AD(self):
         return abs((self.Q_proponent - self.Q_opponent))
+
+    def get_AVG(self):
+        return abs((self.Q_proponent + self.Q_opponent) / 2)

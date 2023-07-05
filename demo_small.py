@@ -11,8 +11,8 @@ if __name__ == "__main__":
 
     # leaf1 = [5, 5]
     # leaf2 = [3, 7]
-    leaf1 = [7, 3]
-    leaf2 = [3, 2]
+    leaf1 = [3, 7]
+    leaf2 = [5, 5]
 
     n7.set_utility_opponent(leaf1[0])
     n7.set_utility_proponent(leaf1[1])
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     root.propagate_utility("bimaximax", -1, '')
     ConsolePrint.print_tree(root, 'bimaximax', -1)
 
-    p_values = [[0, 'geometric'], [-1, 'hm'], [1, ''], [2, ''], [3, 'cubic'], [NaN, 'prod'], [NaN, 'mean/std'],
+    p_values = [[-1, 'hm'], [NaN, 'mean/std'],
                 [NaN, 'mean/stdev']]
 
     for p in p_values:  #

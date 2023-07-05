@@ -5,7 +5,7 @@ import pandas as pd
 #import Levenshtein as leven
 #threshhold = 50
 
-ds = pd.read_csv('../csv_policy_experiments.csv')
+ds = pd.read_csv('../csv_policy_experiments_scaler_1_11.csv')
 column_list = ds.columns
 value_to_compare = 'Q_'
 

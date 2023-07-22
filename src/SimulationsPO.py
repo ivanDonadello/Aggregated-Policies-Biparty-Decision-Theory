@@ -27,7 +27,7 @@ class BipartyDT:
         self.extra_data = {}
         self.df_normalized = None
 
-    def reset_opponent_utilities(self):
+    def reset_utilities(self):
         for _, node in self.dict_tree.items():
             node.Q_opponent = -1
             node.Q_proponent = -1
@@ -95,7 +95,7 @@ class BipartyDT:
         self.df_normalized = df_population.apply(sum_by_value, args=(min_val,), axis=1)
 
     def set_utilities(self, row_id):
-        self.reset_opponent_utilities()
+        self.reset_utilities()
         columns_values = self.df_normalized.iloc[row_id]
         columns = self.df_normalized.columns.values
         for i in range(len(columns)):

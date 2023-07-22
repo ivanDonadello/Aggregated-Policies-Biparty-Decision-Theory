@@ -1,5 +1,7 @@
 import pandas as pd
 import re
+import numpy as np
+import matplotlib.pyplot as plt
 # pd.set_option('display.max_columns', None)  # use only to console print pandas DF
 # pd.set_option('display.max_rows', None)
 print("opp" in "Q_opp")
@@ -36,6 +38,21 @@ for value in value_to_find:
     df1 = df1.apply(lambda x: x.str.replace('.', ','))
     print(df1.T)
 
+
+for tree_id in range(10):
+    prop_ds = pd.read_csv(f'data_generator/datasets_paper/tree_{tree_id}_proponent.csv')
+    opp_ds  = pd.read_csv(f'data_generator/datasets_paper/tree_{tree_id}_opponent.csv')
+    prop = prop_ds.values
+    opp = opp_ds.values
+    stack = np.stack((prop,opp)).T
+    for val in stack:
+        # norm_data = scaler.fit_transform(val)
+        norm_data = val
+        plt.scatter(norm_data[:, 0], norm_data[:, 1], color='blue')
+    plt.title('Transformed Data')
+    plt.axis('equal')
+
+plt.show()
 
 #
 # x = False

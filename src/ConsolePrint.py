@@ -51,9 +51,9 @@ def print_tree(root, agg_function, p, show_id=False):
     print('---------------------------------------------------------------')
     print(1 * space, 'Policy type: {} | p = {}'.format(agg_function, p))
     if show_id:
-        print(1 * space, 'The caption for each is the following  >  [opponent, proponent, aggregated, id]')
+        print(1 * space, 'The caption for each is the following  >  [proponent, opponent, aggregated, id]')
     else:
-        print(1 * space, 'The caption for each is the following  >  [opponent, proponent, aggregated]')
+        print(1 * space, 'The caption for each is the following  >  [proponent, opponent, aggregated]')
     print()
 
     # PRINTING THE NODES IN ORDER

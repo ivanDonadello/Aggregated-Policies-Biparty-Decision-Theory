@@ -7,20 +7,24 @@ from sklearn.preprocessing import MinMaxScaler
 n_population = 1
 
 n_tree = 10
-n_samples = 1000
+n_samples = 100
 mean_prop = 6
 mean_opp = 6
-std_x = 0.2
-std_y = 1.5
+std_x = 0.4
+std_y = 2
 sx, sy = 1, 1
-rotation = 0.27
-type_of_distribution = 0  # 0 = normal / 1 = uniform
-percentage_more = 1.5
-max_value = 12
+rotation = 0.25
+type_of_distribution = 1  # 0 = normal / 1 = uniform
+percentage_more = 1.4
+max_value = 11
+min_value = 0
+uniform_x_min = 4; uniform_x_max = 6
+uniform_y_min = 0; uniform_y_max = 13
 
 save = True
+random_sample_data = False
 cut_outliers = 1  # 0 = False  1 = True
-rint = 0  # 0 = False  1 = True
+rint = 1  # 0 = False  1 = True
 
 def sum_by_value(x, y):
     result = (x + abs(y)) + 1
@@ -42,8 +46,8 @@ def utility_gen(tree_population_ids):
         x = np.random.normal(mean_prop, std_x, n_data_to_gen)
         y = np.random.normal(mean_opp, std_y, n_data_to_gen)
     else:
-        x = np.random.uniform(6,8, n_data_to_gen)
-        y = np.random.uniform(1,12, n_data_to_gen)
+        x = np.random.uniform(uniform_x_min,uniform_x_max, n_data_to_gen)
+        y = np.random.uniform(uniform_y_min,uniform_y_max, n_data_to_gen)
 
     X = np.vstack((x, y)).T
 
@@ -66,25 +70,33 @@ def utility_gen(tree_population_ids):
     Y = np.dot(Y - np.array([mean_x, mean_y]), Rot.T) + np.array([mean_x, mean_y])
     print(Y.shape)
 
-    if cut_outliers:
-        x_original = Y[:, 0]
-        y_original = Y[:, 1]
-        indices = np.where((y_original >= 1) & (y_original < max_value) & (x_original >= 1) & (x_original < max_value))
-        Y = np.vstack((x_original[indices], y_original[indices])).T
-
     if rint:
         Y = np.rint(Y)
 
+    if cut_outliers:
+        x_original = Y[:, 0]
+        y_original = Y[:, 1]
+        indices = np.where((y_original > min_value) & (y_original < max_value) & (x_original > min_value) & (x_original < max_value))
+        Y = np.vstack((x_original[indices], y_original[indices])).T
+
     data = Y
-    random = False
+
     dataset_leaves = []
     for i in range(n_samples):
-        if random:
+        if random_sample_data:
             # Randomly sample n_leaves values from the original array
-            leaves_values = np.random.choice(data, size=5, replace=False)
+            # leaves_values = np.random.choice(data, size=n_leaves, replace=False)
+            x_leaves = np.random.choice(data[:, 0], size=n_leaves, replace=False)
+            print(x_leaves)
             # Get the indices of the selected values in the original array
-            selected_indices = np.where(np.isin(data, leaves_values))
-            data = np.delete(data, selected_indices)
+            x_selected_indices = np.where(np.isin(data[:, 0], x_leaves))
+            print(x_selected_indices, x_selected_indices[0])
+            leaves_values = data[x_selected_indices]
+            print(leaves_values)
+            data = np.delete(data, (x_selected_indices[0],x_selected_indices[0]))
+
+
+
         else:
             # sample n_leaves values from the original array
             leaves_values = data[:n_leaves]
@@ -103,7 +115,7 @@ def utility_gen(tree_population_ids):
         prop_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_proponent.csv", index=False)
         opp_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_opponent.csv", index=False)
 
-    return Y
+    return data, X
 
 
 def run():
@@ -122,9 +134,16 @@ def run():
     print('pop ids = ',tree_population_ids_list)
 
     final_data = []
+    final_original_data = []
     for el in tree_population_ids_list:
-        final_data.append(utility_gen(el))
+        final_data.append(utility_gen(el)[0])
+        final_original_data.append(utility_gen(el)[1])
 
+    for data in final_original_data:
+        plt.scatter(data[:, 0], data[:, 1])
+        plt.title('Original Data')
+        plt.axis('equal')
+    plt.show()
 
     for data in final_data:
         plt.scatter(data[:, 0], data[:, 1])

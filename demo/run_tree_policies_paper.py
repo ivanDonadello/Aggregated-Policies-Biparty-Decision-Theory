@@ -4,13 +4,13 @@ import os
 import pandas as pd
 
 # select the tree
-tree_id = 1
+tree_id = 6
 # select the population
 population_id = 0
 # select the row for the given populationDS
-row_id = 0
+row_id = 1
 # select the policies
-p_values = [[-1, '-1'], [0.5, 'SMD']]
+p_values = [[-1, 'agg'], [0.5, 'SMD']]
 
 data_folder = "../data_generator"
 folder_name = 'datasets_paper' #'datasets'
@@ -18,6 +18,7 @@ folder_name = 'datasets_paper' #'datasets'
 # load tree
 bdt = BipartyDT()
 bdt.load_tree(tree_id)
+
 
 pop_folder = os.path.join(data_folder, folder_name)
 # load proponent dataset
@@ -40,15 +41,17 @@ for i in range(len(columns)):
 result = [f'{"prop"},{"opp"} > {"policie"}']
 # propagate utilities
 bdt.root.propagate_utility("bimaximax", -1, '')
-ConsolePrint.print_tree(bdt.root, 'bimaximax', -1)
+ConsolePrint.print_tree(bdt.root, 'bimaximax', -1, show_type_node=True)
 # append first result
 result.append(f'{bdt.root.Q_proponent},{bdt.root.Q_opponent}  > bimax')
 
 for p in p_values:  #
     bdt.root.propagate_utility("aggregated", p[0], p[1])
     result.append(f'{bdt.root.Q_proponent},{bdt.root.Q_opponent} > {p}')
-    ConsolePrint.print_tree(bdt.root, 'aggregated', p, show_id=False)
+    ConsolePrint.print_tree(bdt.root, 'aggregated', p, show_type_node=True)
 
 print("Summarized Results:")
 for i in result:
     print(i)
+
+print('Height',bdt.root.get_tree_height())

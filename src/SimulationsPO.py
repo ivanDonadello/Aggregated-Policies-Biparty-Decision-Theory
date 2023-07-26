@@ -78,7 +78,7 @@ class BipartyDT:
             self.from_csv(os.path.join(folder, f"tree_{tree_id}.csv"))
         except:
             self.from_csv(os.path.join('../',folder, f"tree_{tree_id}.csv"))
-        self.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
+        self.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
         #self.dict_tree = self.root.dict_tree
 
     def preproc_dataset(self, tree_id, population_id, scaler='min'):

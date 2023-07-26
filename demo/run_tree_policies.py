@@ -27,7 +27,7 @@ result.append(f'{bdt.root.Q_opponent}, {bdt.root.Q_proponent} > bimax')
 for p in p_values:  #
     bdt.root.propagate_utility("aggregated", p[0], p[1])
     result.append(f'{bdt.root.Q_opponent}, {bdt.root.Q_proponent} > {p}')
-    ConsolePrint.print_tree(bdt.root, 'aggregated', p, show_id=False)
+    ConsolePrint.print_tree(bdt.root, 'aggregated', p, show_type_node=True)
 
 print("Summarized Results:")
 for i in result:

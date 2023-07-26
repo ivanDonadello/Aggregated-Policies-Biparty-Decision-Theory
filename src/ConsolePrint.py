@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def print_tree(root, agg_function, p, show_id=False):
+def print_tree(root, agg_function, p, show_type_node=False):
     tree = root.dict_tree
     size_nodes = []
     # tree height and the id for the leaves values
@@ -50,8 +50,8 @@ def print_tree(root, agg_function, p, show_id=False):
 
     print('---------------------------------------------------------------')
     print(1 * space, 'Policy type: {} | p = {}'.format(agg_function, p))
-    if show_id:
-        print(1 * space, 'The caption for each is the following  >  [proponent, opponent, aggregated, id]')
+    if show_type_node:
+        print(1 * space, 'The caption for each is the following  >  [proponent, opponent, aggregated, type]')
     else:
         print(1 * space, 'The caption for each is the following  >  [proponent, opponent, aggregated]')
     print()
@@ -63,7 +63,7 @@ def print_tree(root, agg_function, p, show_id=False):
                 print(space, end='')
             else:
                 if node.Q_opponent == -1:
-                    if show_id:
+                    if show_type_node:
                         sentence = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.Q_proponent, node.utility_opponent,
                                                               node.Q_aggregated, node.id))
                     else:
@@ -74,8 +74,13 @@ def print_tree(root, agg_function, p, show_id=False):
                     rest = (size_space - size_node) % 2
 
                 else:
-                    if show_id:
-                        sentence = ('[{:.0f},{:.0f},{:.0f},{:.2s}]'.format(node.utility_proponent, node.Q_opponent, node.Q_aggregated, node.id))
+                    if show_type_node:
+                        if node.is_decision:
+                            type_of_node = 'd'
+                        else:
+                            type_of_node = 'c'
+
+                        sentence = ('[{:.0f},{:.0f},{:.1f},{:.2s}]'.format(node.Q_proponent, node.Q_opponent, node.Q_aggregated, type_of_node))
                     else:
                         sentence = ('[{:.0f},{:.0f},{:.0f}]'.format(node.Q_proponent, node.Q_opponent, node.Q_aggregated))
                     size_node = len(sentence)

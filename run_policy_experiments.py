@@ -17,17 +17,17 @@ bdt = BipartyDT()
 NaN = float('nan')
 
 data_folder = "data_generator"
-folder_name = 'datasets_random' #'datasets'
+folder_name = 'datasets'  # datasets or datasets_random
 
 #p_values = [[0, 'SMD'],[1, 'SMD'],[0, 'DON'],[0.1, 'DON'],[0.2, 'DON'],[0.3, 'DON'],[0.4, 'DON'],[0.5, 'DON'],[0.6, 'DON'],[0.7, 'DON'],[0.8, 'DON'],[1, 'DON']]
 #p_values = [[-1, 'agg'],[0, 'agg'],[1, 'agg'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],[0.4, 'SMD'],[0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[0.9, 'DON']]
 
-p_values = [[-1, 'agg'],[0, 'agg'],[1, 'agg'],[0, 'SMD'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],[0.4, 'SMD'],
-            [0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[1, 'SMD'],[0, 'DON'],
-            [0.1, 'DON'],[0.2, 'DON'],[0.3, 'DON'],[0.4, 'DON'],[0.5, 'DON'],[0.6, 'DON'],[0.7, 'DON'],
-            [0.8, 'DON'],[0.9, 'DON'],[1, 'DON']]
+# p_values = [[-1, 'agg'],[0, 'agg'],[1, 'agg'],[0, 'SMD'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],[0.4, 'SMD'],
+#             [0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[1, 'SMD'],[0, 'DON'],
+#             [0.1, 'DON'],[0.2, 'DON'],[0.3, 'DON'],[0.4, 'DON'],[0.5, 'DON'],[0.6, 'DON'],[0.7, 'DON'],
+#             [0.8, 'DON'],[0.9, 'DON'],[1, 'DON']]
 
-
+p_values = [[-2, 'agg'],[2, 'agg'],[-1, 'std']]
 
 
 #pd.set_option('display.max_columns', None)  # use only to console print pandas DF
@@ -49,10 +49,10 @@ for tree_id in range(10):
     #tree_id = 1
     # ============== LOAD TREE and COMPUTE CHANCE/DECISION NODES ==============
     #tree_folder = os.path.join("data_generator", "data_new/DT")
-    bdt.load_tree(tree_id)
+    bdt.load_tree(tree_id, fixed_first_node=True, type_first_node='Decision')
     # ConsolePrint.print_tree(bdt.root, 'bimaximax', -1)
 
-    for tree_pop in range(10):
+    for tree_pop in range(1):
         # ============== LOAD POPULATION ==============
         pop_folder = os.path.join(data_folder, folder_name)
         #path_pop = os.path.join(settings.population_folder, f"tree_{tree_id}_population_{tree_pop}.csv")
@@ -113,4 +113,4 @@ for tree_id in range(10):
             sim_data.append(row_result)
 
 sim_ds = pd.DataFrame(data=sim_data,columns=sim_ds_columns)
-sim_ds.to_csv('csv_policy_experiments.csv', encoding='utf-8', index=False)
+sim_ds.to_csv('results/csv_policy_experiments.csv', encoding='utf-8', index=False)

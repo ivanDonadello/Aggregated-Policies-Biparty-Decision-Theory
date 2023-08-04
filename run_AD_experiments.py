@@ -2,6 +2,8 @@ import pandas as pd
 import re
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set(style="whitegrid")
 # pd.set_option('display.max_columns', None)  # use only to console print pandas DF
 # pd.set_option('display.max_rows', None)
 print("opp" in "Q_opp")
@@ -27,7 +29,7 @@ for value in value_to_find:
     print(f'------- {value} --------')
     df1 = df0.mean()
     df1 = df1.round(3)
-    print(df1.columns)
+    # print(df1.columns)
     new_col = []
     for col in df1.columns:
         new_col.append(re.search(r'\((.*?)\)', col).group(1).replace("_", " "))
@@ -35,24 +37,28 @@ for value in value_to_find:
     df1.columns = new_col
     #df1.apply(lambda x: x.str.replace('.', ','))
     df1 = df1.astype('string')
+    # use the following line to change comma to dot for overleaf paper
     df1 = df1.apply(lambda x: x.str.replace('.', ','))
     print(df1.T)
 
+plt.figure(figsize=(6, 5))
 
 for tree_id in range(10):
-    prop_ds = pd.read_csv(f'data_generator/datasets_paper/tree_{tree_id}_proponent.csv')
-    opp_ds  = pd.read_csv(f'data_generator/datasets_paper/tree_{tree_id}_opponent.csv')
+    prop_ds = pd.read_csv(f'../data_generator/datasets_paper/tree_{tree_id}_proponent.csv')
+    opp_ds  = pd.read_csv(f'../data_generator/datasets_paper/tree_{tree_id}_opponent.csv')
     prop = prop_ds.values
     opp = opp_ds.values
     stack = np.stack((prop,opp)).T
-    for val in stack:
-        # norm_data = scaler.fit_transform(val)
-        norm_data = val
-        plt.scatter(norm_data[:, 0], norm_data[:, 1], color='blue')
-    plt.title('Transformed Data')
+    for value in stack:
+        plt.scatter(value[:, 0], value[:, 1], color='#4660AC')
+
+    plt.xlabel('Proponent utility')
+    plt.ylabel('Opponent utility')
     plt.axis('equal')
 
 plt.show()
+
+
 
 #
 # x = False

@@ -49,7 +49,7 @@ pd.set_option('display.max_columns', None)  # use only to console print pandas D
 pd.set_option('display.max_rows', None)
 
 dict_metrics = {}
-for i in range(9):
+for i in range(10):
     #print(f'Tree {i}')
     file_path = f'../data/DT/tree_{i}.csv'
     metrics = calculate_tree_metrics(file_path)

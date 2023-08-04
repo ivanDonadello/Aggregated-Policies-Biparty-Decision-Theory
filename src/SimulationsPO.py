@@ -73,12 +73,28 @@ class BipartyDT:
 
         self.root = self.dict_tree['0']
 
-    def load_tree(self, tree_id, folder=settings.tree_folder):
+    def load_tree(self, tree_id, folder=settings.tree_folder, fixed_first_node=False, type_first_node='Decision'):
         try:
             self.from_csv(os.path.join(folder, f"tree_{tree_id}.csv"))
         except:
             self.from_csv(os.path.join('../',folder, f"tree_{tree_id}.csv"))
-        self.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
+
+        # make the first node after the leaves a fixed type; Decision or Chance node
+        if fixed_first_node:
+            # if we want a decision node at the first layer, we check if the size of the tree are even or odd.
+            if type_first_node == 'Decision':
+                self.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
+                h = self.root.get_tree_height() # get the height
+                if (h % 2) != 0: # if the height is odd
+                    self.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
+            elif type_first_node == 'Chance':
+                self.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
+                h = self.root.get_tree_height()
+                if (h % 2) != 0:
+                    self.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
+        else:
+            self.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
+
         #self.dict_tree = self.root.dict_tree
 
     def preproc_dataset(self, tree_id, population_id, scaler='min'):

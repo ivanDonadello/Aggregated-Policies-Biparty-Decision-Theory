@@ -28,7 +28,7 @@ folder_name = 'datasets_paper' #'datasets'
 #             [0.1, 'DON'],[0.2, 'DON'],[0.3, 'DON'],[0.4, 'DON'],[0.5, 'DON'],[0.6, 'DON'],[0.7, 'DON'],
 #             [0.8, 'DON'],[0.9, 'DON'],[1, 'DON']]
 
-p_values = [[-1, 'agg'],[0, 'agg'],[0.7, 'SMD']]
+p_values = [[-2, 'agg'],[2, 'agg'],[-1, 'std']]
 
 
 
@@ -51,7 +51,7 @@ for tree_id in range(10):
     #tree_id = 1
     # ============== LOAD TREE and COMPUTE CHANCE/DECISION NODES ==============
     #tree_folder = os.path.join("data_generator", "data_new/DT")
-    bdt.load_tree(tree_id)
+    bdt.load_tree(tree_id, fixed_first_node=True, type_first_node='Decision')
     # ConsolePrint.print_tree(bdt.root, 'bimaximax', -1)
 
     for tree_pop in range(1):

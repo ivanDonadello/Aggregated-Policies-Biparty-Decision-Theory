@@ -142,6 +142,12 @@ class TreeNode:
                     score = (w * np.linalg.norm(U, ord=1) ** 2) - ((1 - w) * np.linalg.norm(U, ord=1))
                     self.Q_aggregated = score
 
+                elif v == 'std':
+                    up = self.utility_proponent
+                    uo = self.utility_opponent
+                    score = np.mean([up, uo]) / (statistics.stdev([up, uo]) + 1)
+                    self.Q_aggregated = score
+
                 elif v == 'agg':
                     if p == 0:
                         self.Q_aggregated = np.sqrt(self.utility_proponent * self.utility_opponent)

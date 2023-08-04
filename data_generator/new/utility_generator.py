@@ -14,12 +14,12 @@ std_x = 0.4
 std_y = 2
 sx, sy = 1, 1
 rotation = 0.25
-type_of_distribution = 1  # 0 = normal / 1 = uniform
-percentage_more = 1.4
-max_value = 11
+type_of_distribution = 0  # 0 = normal / 1 = uniform
+percentage_more = 1.2
+max_value = 12
 min_value = 0
 uniform_x_min = 4; uniform_x_max = 6
-uniform_y_min = 0; uniform_y_max = 13
+uniform_y_min = -2; uniform_y_max = 14
 
 save = True
 random_sample_data = False
@@ -106,6 +106,9 @@ def utility_gen(tree_population_ids):
         dataset_leaves.append(leaves_values)
 
     dataset_leaves = np.asarray(dataset_leaves)
+    print(dataset_leaves[1])
+    print('data')
+    print(Y[n_leaves:n_leaves + n_leaves])
     prop_values = dataset_leaves[:, :, 0]
     opp_values = dataset_leaves[:, :, 1]
     prop_dataset = pd.DataFrame(prop_values,columns=leaf_names)
@@ -115,7 +118,7 @@ def utility_gen(tree_population_ids):
         prop_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_proponent.csv", index=False)
         opp_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_opponent.csv", index=False)
 
-    return data, X
+    return dataset_leaves, X
 
 
 def run():
@@ -146,12 +149,17 @@ def run():
     plt.show()
 
     for data in final_data:
-        plt.scatter(data[:, 0], data[:, 1])
+        #print(data)
+        plt.scatter(data[:, :, 0], data[:, :, 1])
         plt.title('Transformed Data')
         plt.axis('equal')
     plt.show()
 
 
+
+
+
 # main
 if __name__ == "__main__":
     run()
+

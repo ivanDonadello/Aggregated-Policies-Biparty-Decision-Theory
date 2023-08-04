@@ -40,6 +40,7 @@ if __name__ == "__main__":
 
     # operazioni di decision theory sull'albero
     bdt.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
+    bdt.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
     bdt.root.propagate_utility("bimaximax", -1, '')
     ConsolePrint.print_tree(root, 'bimaximax', -1, show_type_node=True)
 

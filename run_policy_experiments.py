@@ -22,12 +22,10 @@ folder_name = 'datasets'  # datasets or datasets_random
 #p_values = [[0, 'SMD'],[1, 'SMD'],[0, 'DON'],[0.1, 'DON'],[0.2, 'DON'],[0.3, 'DON'],[0.4, 'DON'],[0.5, 'DON'],[0.6, 'DON'],[0.7, 'DON'],[0.8, 'DON'],[1, 'DON']]
 #p_values = [[-1, 'agg'],[0, 'agg'],[1, 'agg'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],[0.4, 'SMD'],[0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[0.9, 'DON']]
 
-# p_values = [[-1, 'agg'],[0, 'agg'],[1, 'agg'],[0, 'SMD'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],[0.4, 'SMD'],
-#             [0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[1, 'SMD'],[0, 'DON'],
-#             [0.1, 'DON'],[0.2, 'DON'],[0.3, 'DON'],[0.4, 'DON'],[0.5, 'DON'],[0.6, 'DON'],[0.7, 'DON'],
-#             [0.8, 'DON'],[0.9, 'DON'],[1, 'DON']]
+p_values = [[-2, 'agg'],[-1, 'agg'],[0, 'agg'],[1, 'agg'],[2, 'agg'],[0, 'SMD'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],
+            [0.4, 'SMD'], [0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[1, 'SMD'],[-1, 'std']]
 
-p_values = [[-2, 'agg'],[2, 'agg'],[-1, 'std']]
+#p_values = [[-2, 'agg'],[2, 'agg'],[-1, 'std']]
 
 
 #pd.set_option('display.max_columns', None)  # use only to console print pandas DF

@@ -19,14 +19,19 @@ NaN = float('nan')
 data_folder = "data_generator"
 folder_name = 'datasets_paper' #'datasets'
 
+folders = os.path.join(data_folder, folder_name)
+# load the whole dataset
+dataset_path = os.path.join(folders, f"donadelloDS")
+donadelloDS = pd.read_csv(dataset_path)
+
 
 #p_values = [[0, 'SMD'],[1, 'SMD'],[0, 'DON'],[0.1, 'DON'],[0.2, 'DON'],[0.3, 'DON'],[0.4, 'DON'],[0.5, 'DON'],[0.6, 'DON'],[0.7, 'DON'],[0.8, 'DON'],[1, 'DON']]
 #p_values = [[-1, 'agg'],[0, 'agg'],[1, 'agg'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],[0.4, 'SMD'],[0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[0.9, 'DON']]
 
 p_values = [[-2, 'agg'],[-1, 'agg'],[0, 'agg'],[1, 'agg'],[2, 'agg'],[0, 'SMD'],[0.1, 'SMD'],[0.2, 'SMD'],[0.3, 'SMD'],
-            [0.4, 'SMD'], [0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[1, 'SMD'],[-1, 'std']]
+          [0.4, 'SMD'], [0.5, 'SMD'],[0.6, 'SMD'],[0.7, 'SMD'],[0.8, 'SMD'],[0.9, 'SMD'],[1, 'SMD'],[-1, 'std']]
 
-#p_values = [[-2, 'agg'],[2, 'agg'],[-1, 'std']]
+#p_values = [[-2, 'agg']]
 
 
 
@@ -54,33 +59,32 @@ for tree_id in range(10):
 
     for tree_pop in range(1):
         # ============== LOAD POPULATION ==============
-        pop_folder = os.path.join(data_folder, folder_name)
-        # load proponent dataset
-        path_pop = os.path.join(pop_folder, f"tree_{tree_id}_proponent.csv")
-        df_proponent = pd.read_csv(path_pop)
-        # load opponent dataset
-        path_pop = os.path.join(pop_folder, f"tree_{tree_id}_opponent.csv")
-        df_opponent = pd.read_csv(path_pop)
-        columns = df_opponent.columns.values
+        tree_df = donadelloDS.loc[donadelloDS['tree_id'] == tree_id]
+        tree_df = tree_df.dropna(axis=1)
+        prop_df = tree_df.loc[tree_df['utility_type'] == 'proponent']
+        prop_df = prop_df.drop(['tree_id', 'sample_id', 'utility_type'], axis=1)
+        opp_df = tree_df.loc[tree_df['utility_type'] == 'opponent']
+        opp_df = opp_df.drop(['tree_id', 'sample_id', 'utility_type'], axis=1)
 
-        min_prop = df_proponent.min().min()
-        min_opp = df_opponent.min().min()
-        max_prop = df_proponent.max().max()
-        max_opp = df_opponent.max().max()
-        #range_val = abs(max_val - min_val)
+        columns = prop_df.columns
 
-        print('Tree > id: {} | pop: {} | min_prop: {} | max_prop: {} | min_opp: {} | max_opp {}'
-              .format(tree_id, tree_pop, min_prop, max_prop, min_opp, max_opp))
+        min_prop = prop_df.min().min()
+        min_opp = opp_df.min().min()
+        max_prop = prop_df.max().max()
+        max_opp = opp_df.max().max()
+
+        print('Tree > id: {} | min_prop: {} | max_prop: {} | min_opp: {} | max_opp {}'
+              .format(tree_id, min_prop, max_prop, min_opp, max_opp))
 
         # print(df_population[:20])
         # print(df_normalized[:20])
         # print('-------------------------------------------------------------')
         # ============== UPDATE UTILITIES ==============
-        utility_count =  len(df_opponent) # to change to the whole DS >> len(df_normalized)
+        utility_count =  len(prop_df) # to change to the whole DS >> len(df_normalized)
         for row in range(utility_count):  # len(df_normalized)):  # to change to the whole DS >> len(df_normalized)
             bdt.reset_utilities()
-            prop_values = df_proponent.iloc[row]
-            opp_values = df_opponent.iloc[row]
+            prop_values = prop_df.iloc[row]
+            opp_values = opp_df.iloc[row]
             for i in range(len(columns)):
                 bdt.dict_tree[columns[i]].set_utility_proponent(prop_values[i])
                 bdt.dict_tree[columns[i]].set_utility_opponent(opp_values[i])

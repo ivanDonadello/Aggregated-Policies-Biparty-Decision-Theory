@@ -36,10 +36,13 @@ def utility_gen(tree_population_ids):
     sample_id = tree_population_ids[1]
     simulation = tree_population_ids[2]
     height = tree_population_ids[3]
-    leaves, leaf_names = simulation.get_leaves()
+    leaves, leaves_names = simulation.get_leaves()
     n_leaves = len(leaves)
     print(f'n of leaves: {n_leaves} ')
-    print(leaf_names)
+    print(leaves_names)
+
+    # set the seed as the tree_id number
+    np.random.seed(tree_id)
 
     data = []
     for i in range(n_samples):
@@ -95,14 +98,20 @@ def utility_gen(tree_population_ids):
     # print(normalized_data)
     # print(f'proponent: {prop_values}')
     # print(f'proponent: {opp_values}')
-    prop_dataset = pd.DataFrame(prop_values, columns=leaf_names)
-    opp_dataset = pd.DataFrame(opp_values, columns=leaf_names)
+    samples_id_values = np.arange(n_samples).astype(int)
+    prop_dataset = pd.DataFrame(prop_values, columns=leaves_names)
+    prop_dataset.insert(0, 'utility_type', 'proponent')
+    prop_dataset.insert(0, 'sample_id', samples_id_values)
+    prop_dataset.insert(0, 'tree_id', tree_id)
 
-    if save:
-        prop_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_proponent.csv", index=False)
-        opp_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_opponent.csv", index=False)
+    opp_dataset = pd.DataFrame(opp_values, columns=leaves_names)
+    opp_dataset.insert(0, 'utility_type', 'opponent')
+    opp_dataset.insert(0, 'sample_id', samples_id_values)
+    opp_dataset.insert(0, 'tree_id', tree_id)
 
-    return normalized_data, X
+    concat_df = pd.concat([prop_dataset, opp_dataset], axis=0, ignore_index=True)
+
+    return normalized_data, X, concat_df
 
 
 def run():
@@ -122,10 +131,12 @@ def run():
 
     final_data = []
     final_original_data = []
+    dataframes = []
     for el in tree_population_ids_list:
-        a, b = utility_gen(el)
+        a, b, dataframe = utility_gen(el)
         final_data.append(a)
         final_original_data.append(b)
+        dataframes.append(dataframe)
 
     for data in final_original_data:
         plt.scatter(data[:, 0], data[:, 1])
@@ -140,6 +151,17 @@ def run():
         plt.axis('equal')
     plt.show()
 
+    if save:
+        # prop_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_proponent.csv", index=False)
+        # opp_dataset.to_csv(f"../datasets_paper/tree_{tree_id}_opponent.csv", index=False)
+        first_columns = ['tree_id', 'sample_id', 'utility_type']
+        orderer_columns = np.arange(start=6, stop=171, dtype=int).astype(str)
+
+        reorder_columns = np.concatenate((first_columns,orderer_columns))
+        print(reorder_columns)
+        concat_dataframes = pd.concat(dataframes, axis=0, ignore_index=True)
+        concat_dataframes = concat_dataframes.reindex(columns=reorder_columns)
+        concat_dataframes.to_csv(f"../datasets_paper/donadello2023UNB", index=False)
 
 # main
 if __name__ == "__main__":

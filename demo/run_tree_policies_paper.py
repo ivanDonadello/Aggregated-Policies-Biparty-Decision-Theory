@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 # select the tree
-tree_id = 6
+tree_id = 1
 # select the population
 population_id = 0
 # select the row for the given populationDS
@@ -12,25 +12,33 @@ row_id = 1
 # select the policies
 p_values = [[-1, 'agg'], [0.5, 'SMD']]
 
-data_folder = "../data_generator"
+data_folder = "../data"
 folder_name = 'datasets_paper' #'datasets'
+dataset_name = 'donadello2023unbalanced'
 
 # load tree
 bdt = BipartyDT()
 bdt.load_tree(tree_id)
 
 
-pop_folder = os.path.join(data_folder, folder_name)
+folders = os.path.join(data_folder, folder_name)
 # load proponent dataset
-path_pop = os.path.join(pop_folder, f"tree_{tree_id}_proponent.csv")
-df_proponent = pd.read_csv(path_pop)
-# load opponent dataset
-path_pop = os.path.join(pop_folder, f"tree_{tree_id}_opponent.csv")
-df_opponent = pd.read_csv(path_pop)
-columns = df_opponent.columns.values
+dataset_path = os.path.join(folders, dataset_name)
+donadelloDS = pd.read_csv(dataset_path)
+tree_df = donadelloDS.loc[donadelloDS['tree_id'] == tree_id]
+tree_df = tree_df.dropna(axis=1)
+
 # bdt.preproc_dataset(tree_id,population_id)
-prop_values = df_proponent.iloc[row_id]
-opp_values = df_opponent.iloc[row_id]
+#print(df_selected.loc[:5])
+prop_df = tree_df.loc[tree_df['utility_type'] == 'proponent']
+prop_df = prop_df.drop(['tree_id', 'sample_id', 'utility_type'], axis=1)
+opp_df = tree_df.loc[tree_df['utility_type'] == 'opponent']
+opp_df = opp_df.drop(['tree_id', 'sample_id', 'utility_type'], axis=1)
+
+columns = prop_df.columns
+
+prop_values = prop_df.iloc[row_id]
+opp_values = opp_df.iloc[row_id]
 
 for i in range(len(columns)):
     bdt.dict_tree[columns[i]].set_utility_proponent(prop_values[i])

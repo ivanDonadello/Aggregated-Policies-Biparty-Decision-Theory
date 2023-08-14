@@ -1,4 +1,3 @@
-import pdb
 from src.BipartyNodeDT import TreeNode
 from src.SimulationsAG import BipartyDT
 import src.ConsolePrint as ConsolePrint

@@ -13,7 +13,7 @@ def sum_by_value(x, y):
     return result
 
 # pop_df = pd.read_csv('../data/datasets/tree_1_population_1.csv')
-pop_df = pd.read_csv('../data_generator/datasets/tree_1_population_2.csv')
+pop_df = pd.read_csv('../src/data_generator/datasets/tree_1_population_2.csv')
 pop_df = pop_df.drop('id', axis=1)
 # selected_df = AD_df[['AD (bimax)','AD (-1)']][AD_df.tree_height == 4]
 print(pop_df.describe())

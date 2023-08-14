@@ -33,11 +33,11 @@ if __name__ == "__main__":
 
     # tree_height
     # ============== SETTING UP THE FIRST COLUMNS OF THE FINAL DATASET ==============
-    sim_ds_columns = ['Tree_id', 'Population_id', 'Sample_id', 'tree_height', 'Q_prop (bimax)', 'Q_opp (bimax)', 'AD (bimax)']
+    sim_ds_columns = ['Tree_id', 'Population_id', 'Sample_id', 'tree_height', 'APU (bimax)', 'AOU (bimax)', 'AAD (bimax)']
     for p in p_values:
-        sim_ds_columns.append(f'Q_prop ({p[1]}_{p[0]})')
-        sim_ds_columns.append(f'Q_opp ({p[1]}_{p[0]})')
-        sim_ds_columns.append(f'AD ({p[1]}_{p[0]})')
+        sim_ds_columns.append(f'APU ({p[1]}_{p[0]})')
+        sim_ds_columns.append(f'AOU ({p[1]}_{p[0]})')
+        sim_ds_columns.append(f'AAD ({p[1]}_{p[0]})')
 
     sim_data = []  # vector/matrix used to append and store raw data (rows) to then construct the pandas DF
 
@@ -93,4 +93,4 @@ if __name__ == "__main__":
                 sim_data.append(row_result)
 
     sim_ds = pd.DataFrame(data=sim_data,columns=sim_ds_columns)
-    sim_ds.to_csv(f'results/csv_policy_{dataset_name}.csv', encoding='utf-8', index=False)
+    sim_ds.to_csv(f'results/policies_experiments_{dataset_name}.csv', encoding='utf-8', index=False)

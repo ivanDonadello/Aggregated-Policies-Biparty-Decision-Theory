@@ -23,6 +23,25 @@ The following Python packages are required:
 
 ### Running the code
 
+To run the policy experiments for a given dataset (don2022 or don2022NoOPT), type:
+```
+python3 run_policy_experiments.py --ds=don2022
+```
+or
+```
+python3 run_policy_experiments.py --ds=don2022NoOPT
+```
+
+To run the metrics evaluation, type:
+```
+python3 run_policy_experiments.py --ds=don2022
+```
+for the don2022 dataset or
+```
+python3 run_policy_experiments.py --ds=don2022NoOPT
+```
+for the don2022NoOPT dataset. 
 
 ### Results
+After running the experiments, the results are .. in the `results` folder. 
 

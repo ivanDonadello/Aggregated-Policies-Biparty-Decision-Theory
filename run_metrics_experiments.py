@@ -10,13 +10,13 @@ if __name__ == "__main__":
     dataset_name = args.ds
     print(f'Running experiments using {dataset_name} dataset')
 
-    policy_df = pd.read_csv('results/csv_policy_don2022.csv')
+    policy_df = pd.read_csv(f'results/policies_experiments_{dataset_name}.csv')
     df_columns = policy_df.columns
 
-    value_to_find = ['AD', 'Q_prop', 'Q_opp']
-    dataset_name = 'don2022'
+    metrics = ['AAD', 'APU', 'AOU']
+    #dataset_name = 'don2022'
 
-    for value in value_to_find:
+    for value in metrics:
         ad_columns = []
 
         for column in df_columns:
@@ -36,7 +36,5 @@ if __name__ == "__main__":
 
         df1.columns = new_col
         df1 = df1.astype('string')
-        # use the following line to change comma to dot for overleaf paper
-        # df1 = df1.apply(lambda x: x.str.replace('.', ','))
         print(df1.T)
-        df1.to_csv(f'results/{dataset_name}_{value}.csv', encoding='utf-8', index=False)
+        df1.T.to_csv(f'results/metrics_{value}_{dataset_name}.csv', encoding='utf-8')

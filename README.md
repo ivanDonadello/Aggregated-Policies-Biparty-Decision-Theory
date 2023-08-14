@@ -15,7 +15,7 @@ The following Python packages are required:
 -   [numpy](http://www.numpy.org/) tested with version 1.25.0;
 -   [pandas](https://pandas.pydata.org/) tested with version 2.0.2.
 -   [matplotlib](https://matplotlib.org/) tested with version 3.7.1;
--   [https://seaborn.pydata.org/](https://seaborn.pydata.org/) tested with version 0.12.2.
+-   [seaborn](https://seaborn.pydata.org/) tested with version 0.12.2.
 -   [pygraphviz](https://pypi.org/project/pygraphviz/) tested with version 1.7.0.
 
 
@@ -43,5 +43,12 @@ python3 run_policy_experiments.py --ds=don2022NoOPT
 for the don2022NoOPT dataset. 
 
 ### Results
-After running the experiments, the results are .. in the `results` folder. 
+After running the experiments, the results are listed in the `results` folder. All tables described in the paper
+can be found in this folder as csv files for each `dataset` `(don2022 and don2022NoOPT)`. 
 
+`policies_experiments`: presents the results for running `run_policy_experiments.py` each tree in `\data\DT` with the given 
+policies.
+
+`metrics`: presents the results for running the metrics `(AAD, APU, AOU)` with `run_metrics_experiments.py` for each `policies_experiments` in `results` folder.
+
+`trees_metrics`: table with metrics for all Decision trees in `\data\DT`.

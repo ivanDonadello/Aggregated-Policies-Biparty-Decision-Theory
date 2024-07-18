@@ -11,7 +11,7 @@ def sum_by_value(x, y):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument('--ds', default='don2022', help='input dataset')
+    parser.add_argument('--ds', default='don2022_new', help='input dataset')  # donadello2023UNB don2022
 
     args = parser.parse_args()
     dataset_name = args.ds
@@ -91,6 +91,9 @@ if __name__ == "__main__":
                     row_result.append(bdt.root.get_AD())
 
                 sim_data.append(row_result)
+                # print('prop', bdt.root.Q_proponent)
+                # print('opp', bdt.root.Q_opponent)
+                # print(row_result)
 
     sim_ds = pd.DataFrame(data=sim_data,columns=sim_ds_columns)
-    sim_ds.to_csv(f'results/policies_experiments_{dataset_name}.csv', encoding='utf-8', index=False)
+    sim_ds.to_csv(f'results/2policies_experiments_{dataset_name}.csv', encoding='utf-8', index=False)

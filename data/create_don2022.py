@@ -8,9 +8,16 @@ def sum_by_value(x, y):
     return result
 
 
+chose_ds = 0
+if chose_ds == 1:
+    folder = 'datasets'
+
+else:
+    folder = '../src/data_generator/datasets_random'
+
 n_population = 1
-n_tree = 10
-n_samples = 1000
+n_tree = 1
+n_samples = 10
 samples_id_values = np.arange(n_samples).astype(int)
 
 dataframes = []
@@ -22,13 +29,14 @@ for tree_id in range(n_tree):
     for leaf in leaves:
         tree_prop_utilities.append(leaf.utility_proponent)
 
+    #print(tree_prop_utilities)
     # because the proponent values is static (from the DT dataset), we have to duplicate the data to achieve n_samples
     prop_values = []
     for i in range(n_samples):
         prop_values.append(tree_prop_utilities)
 
     for population_id in range(n_population):
-        opp_dataset = pd.read_csv(f'datasets/tree_{tree_id}_population_{population_id}.csv')
+        opp_dataset = pd.read_csv(f'{folder}/tree_{tree_id}_population_{population_id}.csv')
         opp_dataset = opp_dataset.drop(columns='id')
         opp_dataset = opp_dataset.iloc[:n_samples]
 
@@ -60,4 +68,4 @@ reorder_columns = np.concatenate((first_columns,orderer_columns))
 concat_dataframes = pd.concat(dataframes, axis=0, ignore_index=True)
 concat_dataframes = concat_dataframes.reindex(columns=reorder_columns)
 # print(concat_dataframes)
-concat_dataframes.to_csv(f"../data/datasets_paper/don2022", index=False)
+concat_dataframes.to_csv(f"../data/datasets_paper/don2022OPT_new", index=False)

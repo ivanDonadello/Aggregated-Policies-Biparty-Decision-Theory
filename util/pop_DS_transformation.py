@@ -1,8 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-#import scipy.stats as stats
-import numpy as np
 
 pd.set_option('display.max_columns', None)  # use only to console print pandas DF
 #pd.set_option('display.max_rows', None)

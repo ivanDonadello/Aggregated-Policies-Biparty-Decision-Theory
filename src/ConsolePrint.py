@@ -49,7 +49,7 @@ def print_tree(root, agg_function, p, show_type_node=False):
     space = ' ' * size_space # if we get the size of the bigger string will be better?
 
     print('---------------------------------------------------------------')
-    print(1 * space, 'Policy type: {} | p = {}'.format(agg_function, p))
+    print(1 * space, 'Policy type: {} | k = {}'.format(agg_function, p))
     if show_type_node:
         print(1 * space, 'The caption for each is the following  >  [proponent, opponent, aggregated, type]')
     else:

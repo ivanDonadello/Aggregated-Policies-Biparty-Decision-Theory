@@ -13,17 +13,17 @@ if __name__ == "__main__":
     n6 = TreeNode("n6", "Try to reduce red meat slowly.")
     n7 = TreeNode("n7", "White meat can be an alternative.")
     n8 = TreeNode("n8", "Fish is a tasty alternative to meat.")
-    n5.set_utility_opponent(6)
-    n5.set_utility_proponent(3)
+    n5.set_utility_opponent(2)
+    n5.set_utility_proponent(7)
     n6.set_utility_opponent(5)
-    n6.set_utility_proponent(4)
-    n7.set_utility_opponent(7)
-    n7.set_utility_proponent(2)
+    n6.set_utility_proponent(5)
+    n7.set_utility_opponent(3)
+    n7.set_utility_proponent(7)
     n8.set_utility_opponent(6)
-    n8.set_utility_proponent(3)
+    n8.set_utility_proponent(6)
 
     # array of policies to be applied
-    policies = [[-1, 'agg'], [0.5, 'SMD'], [0.9, 'DON']]
+    policies = [[0, 'agg'], [0.5, 'SMD'], [0.9, 'DON']]
 
     # Creazione albero
     root.add_child(n2)
@@ -39,13 +39,13 @@ if __name__ == "__main__":
 
     # operazioni di decision theory sull'albero
     bdt.root.compute_chance_decision(is_decision_node=True, height=0, dict_tree={})
-    bdt.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
+    #bdt.root.compute_chance_decision(is_decision_node=False, height=0, dict_tree={})
     bdt.root.propagate_utility("bimaximax", -1, '')
-    ConsolePrint.print_tree(root, 'bimaximax', -1, show_type_node=True)
+    ConsolePrint.print_tree(root, 'bimaximax', -1, show_type_node=False)
 
     for p in policies:  #
         root.propagate_utility("aggregated", p[0], p[1])
-        ConsolePrint.print_tree(root, 'aggregated', p, show_type_node=True)
+        ConsolePrint.print_tree(root, 'aggregated', p, show_type_node=False)
 
 key = bdt.root.dict_tree
 print(key.keys())

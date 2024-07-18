@@ -5,9 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 n_population = 1
-
 n_tree = 10
-n_samples = 100
+n_samples = 1000
 mean_prop = 6
 mean_opp = 6
 std_x = 0.2
@@ -120,7 +119,7 @@ def run():
     for tree_id in range(n_tree):
         # load tree
         bdt = BipartyDT()
-        bdt.load_tree(tree_id, folder='../data/DT')
+        bdt.load_tree(tree_id, folder='../../data/DT')
         #print(bdt.get_tree_height())
         # create object
         # append tree information
@@ -161,7 +160,7 @@ def run():
         print(reorder_columns)
         concat_dataframes = pd.concat(dataframes, axis=0, ignore_index=True)
         concat_dataframes = concat_dataframes.reindex(columns=reorder_columns)
-        concat_dataframes.to_csv(f"../datasets_paper/donadello2023UNB", index=False)
+        concat_dataframes.to_csv(f"donadello2023UNB", index=False)
 
 # main
 if __name__ == "__main__":

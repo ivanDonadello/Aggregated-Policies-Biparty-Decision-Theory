@@ -1,5 +1,5 @@
 # Aggregated-Policies-Biparty-Decision-Theory
-
+This repository contains the source code for the paper "Compromises in Dialogical Argumentation: Aggregated Policies for Biparty Decision Theory" published at the 27th European Conference on Artificial Intelligence (ECAI 2024).
 
 ## Structure
 - `src` that contains the source Python code;
@@ -45,6 +45,12 @@ for the don2022NoOPT dataset.
 ### Results
 After running the experiments, the results are listed in the `results` folder. All tables described in the paper
 can be found in this folder as csv files for each `dataset` `(don2022 and don2022NoOPT)`. 
+
+### Citing
+Please use the following `.bib` entry to cite our work
+```
+TO APPEAR
+```
 
 `policies_experiments`: presents the results for running `run_policy_experiments.py` each tree in `\data\DT` with the given 
 policies.

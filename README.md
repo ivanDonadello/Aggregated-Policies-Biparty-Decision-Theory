@@ -44,17 +44,15 @@ for the don2022NoOPT dataset.
 
 ### Results
 After running the experiments, the results are listed in the `results` folder. All tables described in the paper
-can be found in this folder as csv files for each `dataset` `(don2022 and don2022NoOPT)`. 
+can be found in this folder as csv files for each `dataset` `(don2022 and don2022NoOPT)`:
+
+- `policies_experiments`: presents the results for running `run_policy_experiments.py` each tree in `\data\DT` with the given 
+policies.
+- `metrics`: presents the results for running the metrics `(AAD, APU, AOU)` with `run_metrics_experiments.py` for each `policies_experiments` in `results` folder.
+- `trees_metrics`: table with metrics for all Decision trees in `\data\DT`.
 
 ### Citing
 Please use the following `.bib` entry to cite our work
 ```
 TO APPEAR
 ```
-
-`policies_experiments`: presents the results for running `run_policy_experiments.py` each tree in `\data\DT` with the given 
-policies.
-
-`metrics`: presents the results for running the metrics `(AAD, APU, AOU)` with `run_metrics_experiments.py` for each `policies_experiments` in `results` folder.
-
-`trees_metrics`: table with metrics for all Decision trees in `\data\DT`.

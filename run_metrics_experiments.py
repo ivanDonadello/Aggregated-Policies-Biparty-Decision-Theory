@@ -4,15 +4,15 @@ from argparse import ArgumentParser
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument('--ds', default='don2022', help='input dataset')
-    #parser.add_argument('--ds', default='don2022NoOPT', help='input dataset')
+    #parser.add_argument('--ds', default='don2022', help='input dataset')
+    parser.add_argument('--ds', default='don2022OPT_new', help='input dataset')
     #parser.add_argument('--ds', default='donOPT_new', help='input dataset')
 
     args = parser.parse_args()
     dataset_name = args.ds
     print(f'Running experiments using {dataset_name} dataset')
 
-    policy_df = pd.read_csv(f'results/2policies_experiments_{dataset_name}_new.csv')
+    policy_df = pd.read_csv(f'results/policies_experiments_{dataset_name}.csv')
     df_columns = policy_df.columns
 
     metrics = ['AAD', 'APU', 'AOU', 'accept']
@@ -43,7 +43,7 @@ if __name__ == "__main__":
                 df1.columns = new_col
                 df1 = df1.astype('string')
                 print(df1.T)
-                #df1.T.to_csv(f'results/metrics_{value}_mean{mean}_{dataset_name}.csv', encoding='utf-8')
+                df1.T.to_csv(f'results/metrics_{value}_mean{mean}_{dataset_name}.csv', encoding='utf-8')
 
         else:
             df0 = policy_df[ad_columns].groupby('tree_height')
@@ -58,4 +58,4 @@ if __name__ == "__main__":
             df1.columns = new_col
             df1 = df1.astype('string')
             print(df1.T)
-            #df1.T.to_csv(f'results/metrics_{value}_{dataset_name}.csv', encoding='utf-8')
+            df1.T.to_csv(f'results/metrics_{value}_{dataset_name}.csv', encoding='utf-8')

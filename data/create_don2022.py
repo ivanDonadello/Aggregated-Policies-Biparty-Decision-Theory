@@ -8,16 +8,24 @@ def sum_by_value(x, y):
     return result
 
 
-chose_ds = 0
+chose_ds = 2
+# 1 for original dataset (with negative numbers)
 if chose_ds == 1:
     folder = 'datasets'
 
-else:
+# 2 for original dataset, but with normalized numbers
+elif chose_ds == 2:
+    folder = '../src/data_generator/datasets'
+
+# 3 for random number generated dataset, with seed 0
+elif chose_ds == 3:
     folder = '../src/data_generator/datasets_random'
 
+
+
 n_population = 1
-n_tree = 1
-n_samples = 10
+n_tree = 10
+n_samples = 1000
 samples_id_values = np.arange(n_samples).astype(int)
 
 dataframes = []

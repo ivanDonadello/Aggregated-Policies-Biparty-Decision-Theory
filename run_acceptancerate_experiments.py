@@ -7,7 +7,8 @@ from argparse import ArgumentParser
 if __name__ == "__main__":
     # Read dataset
     parser = ArgumentParser()
-    parser.add_argument('--ds', default='don2022NoOPT', help='input dataset') # donadello2023UNB  don2022NoOPT
+    #parser.add_argument('--ds', default='don2022NoOPT', help='input dataset') # donadello2023UNB  don2022NoOPT
+    parser.add_argument('--ds', default='don2022OPT_new', help='input dataset')
     args = parser.parse_args()
     dataset_name = args.ds
     print(f'Running experiments using {dataset_name} dataset')
@@ -19,8 +20,9 @@ if __name__ == "__main__":
     # Generate a list of 1000 random integers between 1 and 10
     #mean_Clusters = [random.randint(1, 10) for _ in range(1000)]
 
-    # Generate a list of size 1000 with random distribution of 3, 5, and 7 values
-    mean_Clusters = random.choices([3, 5, 7], k=1000)
+    # Generate a list of size N (size of the dataset) with random distribution of 3, 5, and 7 values
+    rows_dataset = len(policy_df)
+    mean_Clusters = random.choices([3, 5, 7], k=rows_dataset)
     mean_cluster_columns_values = []
 
     for i in range(1):

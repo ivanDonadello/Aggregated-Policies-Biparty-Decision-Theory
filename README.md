@@ -23,24 +23,51 @@ The following Python packages are required:
 
 ### Running the code
 
-To run the policy experiments for a given dataset (don2022 or don2022NoOPT), type:
+
+To run the all the experiments (Load trees, propagate utilities and generate all metrics in the paper)
+for both datasets (**don2022** or **don2022NoOPT**), use:
 ```
-python3 run_policy_experiments.py --ds=don2022
+python3 run_experiments.py --ds=don2022
 ```
 or
 ```
-python3 run_policy_experiments.py --ds=don2022NoOPT
+python3 run_experiments.py --ds=don2022NoOPT
 ```
 
-To run the metrics evaluation, type:
-```
-python3 run_policy_experiments.py --ds=don2022
-```
-for the don2022 dataset or
-```
-python3 run_policy_experiments.py --ds=don2022NoOPT
-```
-for the don2022NoOPT dataset. 
+[//]: # (To run the policy experiments for a given dataset &#40;don2022 or don2022NoOPT&#41;, type:)
+
+[//]: # (```)
+
+[//]: # (python3 run_policy_experiments.py --ds=don2022)
+
+[//]: # (```)
+
+[//]: # (or)
+
+[//]: # (```)
+
+[//]: # (python3 run_policy_experiments.py --ds=don2022NoOPT)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (To run the metrics evaluation, type:)
+
+[//]: # (```)
+
+[//]: # (python3 run_policy_experiments.py --ds=don2022)
+
+[//]: # (```)
+
+[//]: # (for the don2022 dataset or)
+
+[//]: # (```)
+
+[//]: # (python3 run_policy_experiments.py --ds=don2022NoOPT)
+
+[//]: # (```)
+
+[//]: # (for the don2022NoOPT dataset. )
 
 ### Results
 After running the experiments, the results are listed in the `results` folder. All tables described in the paper
